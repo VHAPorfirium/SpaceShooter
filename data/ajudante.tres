@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DadosPoder" format=3 uid="uid://dln3nqyp0p5uf"]
+
+[ext_resource type="Script" uid="uid://dmudhv7kjtr3o" path="res://script/dados_poder.gd" id="1_yy2fc"]
+
+[resource]
+script = ExtResource("1_yy2fc")
+nome = "Ajudante"
+tipo = 3
+duracao = 15.0
+cor = Color(1, 0.56078434, 0.81960785, 1)
+rotulo = "+"
+metadata/_custom_type_script = "uid://dmudhv7kjtr3o"

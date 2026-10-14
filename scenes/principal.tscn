@@ -3,17 +3,27 @@
 [ext_resource type="Script" uid="uid://ghwfr1q32rqs" path="res://script/principal.gd" id="1_6f3be"]
 [ext_resource type="PackedScene" uid="uid://w825y8k508qu" path="res://scenes/tiro.tscn" id="2_j5742"]
 [ext_resource type="PackedScene" uid="uid://bivh2uqsnhqvv" path="res://scenes/inimigo.tscn" id="3_0pxoi"]
+[ext_resource type="PackedScene" uid="uid://caf8bvqajvbw" path="res://scenes/tiro_inimigo.tscn" id="3_ckosc"]
 [ext_resource type="PackedScene" uid="uid://csj1h2r4aok2r" path="res://scenes/jogador.tscn" id="3_jccv5"]
 [ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="4_0at3r"]
 [ext_resource type="Resource" uid="uid://4v284omfw45w" path="res://data/bastiao.tres" id="5_ckosc"]
+[ext_resource type="PackedScene" uid="uid://45w5n6lhbmof" path="res://scenes/item_poder.tscn" id="5_nb6mp"]
 [ext_resource type="Resource" uid="uid://dxtchife2kjqs" path="res://data/batedor.tres" id="6_awm7n"]
 [ext_resource type="Resource" uid="uid://ia3v7pp2ar8q" path="res://data/serpente.tres" id="7_ucw2e"]
+[ext_resource type="Script" uid="uid://dmudhv7kjtr3o" path="res://script/dados_poder.gd" id="10_pvsfa"]
+[ext_resource type="Resource" uid="uid://cr8s2k8cy83pu" path="res://data/tiro_duplo.tres" id="11_v36gc"]
+[ext_resource type="Resource" uid="uid://dhgco1t4ylsq4" path="res://data/tiro_triplo.tres" id="12_xyofb"]
+[ext_resource type="Resource" uid="uid://cipdg5nnl827l" path="res://data/escudo.tres" id="13_cf5mm"]
+[ext_resource type="Resource" uid="uid://dln3nqyp0p5uf" path="res://data/ajudante.tres" id="14_pvsfa"]
 
 [node name="Principal" type="Node2D" unique_id=1697945304]
 script = ExtResource("1_6f3be")
 cena_tiro = ExtResource("2_j5742")
+cena_tiro_inimigo = ExtResource("3_ckosc")
 cena_inimigo = ExtResource("3_0pxoi")
+cena_item = ExtResource("5_nb6mp")
 tipos_inimigo = Array[ExtResource("4_0at3r")]([ExtResource("5_ckosc"), ExtResource("6_awm7n"), ExtResource("7_ucw2e")])
+poderes = Array[ExtResource("10_pvsfa")]([ExtResource("11_v36gc"), ExtResource("12_xyofb"), ExtResource("13_cf5mm"), ExtResource("14_pvsfa")])
 
 [node name="Jogador" parent="." unique_id=732930375 instance=ExtResource("3_jccv5")]
 position = Vector2(240, 630)
@@ -41,3 +51,19 @@ offset_bottom = 33.0
 [node name="Mensagem" type="Label" parent="." unique_id=144367220]
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="TirosInimigos" type="Node2D" parent="." unique_id=2121847991]
+
+[node name="RecordeLabel" type="Label" parent="." unique_id=1637996963]
+offset_left = 16.0
+offset_top = 36.0
+offset_right = 56.0
+offset_bottom = 59.0
+
+[node name="PoderLabel" type="Label" parent="." unique_id=454244548]
+offset_left = 16.0
+offset_top = 60.0
+offset_right = 56.0
+offset_bottom = 83.0
+
+[node name="Itens" type="Node2D" parent="." unique_id=999731342]

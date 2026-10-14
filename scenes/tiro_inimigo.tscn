@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://caf8bvqajvbw"]
+
+[ext_resource type="Script" uid="uid://c5c441wq0hjt6" path="res://script/tiro_inimigo.gd" id="1_rjgxh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d5qys"]
+size = Vector2(8, 8)
+
+[node name="TiroInimigo" type="Area2D" unique_id=893664014]
+collision_layer = 8
+script = ExtResource("1_rjgxh")
+
+[node name="Forma" type="CollisionShape2D" parent="." unique_id=460736002]
+shape = SubResource("RectangleShape2D_d5qys")
+
+[node name="Desenho" type="Polygon2D" parent="." unique_id=616720619]
+
+[node name="Notificador" type="VisibleOnScreenNotifier2D" parent="." unique_id=944566239]

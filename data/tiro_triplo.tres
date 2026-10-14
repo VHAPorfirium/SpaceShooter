@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DadosPoder" format=3 uid="uid://dhgco1t4ylsq4"]
+
+[ext_resource type="Script" uid="uid://dmudhv7kjtr3o" path="res://script/dados_poder.gd" id="1_6toby"]
+
+[resource]
+script = ExtResource("1_6toby")
+nome = "Tiro Triplo"
+tipo = 1
+rotulo = "3x"
+metadata/_custom_type_script = "uid://dmudhv7kjtr3o"

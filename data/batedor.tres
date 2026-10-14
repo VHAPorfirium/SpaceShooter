@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="DadosInimigo" format=3 uid="uid://dxtchife2kjqs"]
+
+[ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="1_4bjsf"]
+
+[resource]
+script = ExtResource("1_4bjsf")
+metadata/_custom_type_script = "uid://ceelcslf8dq6m"

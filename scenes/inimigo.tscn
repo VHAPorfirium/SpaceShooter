@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bivh2uqsnhqvv"]
+
+[ext_resource type="Script" uid="uid://buwfl4opm4a3s" path="res://script/inimigo.gd" id="1_pt50e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
+size = Vector2(30, 28)
+
+[node name="Inimigo" type="Area2D" unique_id=44566338]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_pt50e")
+
+[node name="Forma" type="CollisionShape2D" parent="." unique_id=1517331258]
+shape = SubResource("RectangleShape2D_hjp0y")
+
+[node name="Desenho" type="Polygon2D" parent="." unique_id=1689742711]
+
+[node name="Notificador" type="VisibleOnScreenNotifier2D" parent="." unique_id=1978935507]

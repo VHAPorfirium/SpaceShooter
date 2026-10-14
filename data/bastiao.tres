@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="DadosInimigo" format=3 uid="uid://4v284omfw45w"]
+
+[ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="1_0pm12"]
+
+[resource]
+script = ExtResource("1_0pm12")
+vida = 3
+velocidade = 55.0
+pontos = 50
+cor = Color(1, 0.62352943, 0.27058825, 1)
+forma = 2
+tamanho = Vector2(38, 34)
+metadata/_custom_type_script = "uid://ceelcslf8dq6m"

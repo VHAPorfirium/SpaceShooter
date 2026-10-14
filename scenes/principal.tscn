@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://bj7q5dgk0750x"]
+
+[ext_resource type="Script" uid="uid://ghwfr1q32rqs" path="res://script/principal.gd" id="1_6f3be"]
+[ext_resource type="PackedScene" uid="uid://w825y8k508qu" path="res://scenes/tiro.tscn" id="2_j5742"]
+[ext_resource type="PackedScene" uid="uid://bivh2uqsnhqvv" path="res://scenes/inimigo.tscn" id="3_0pxoi"]
+[ext_resource type="PackedScene" uid="uid://csj1h2r4aok2r" path="res://scenes/jogador.tscn" id="3_jccv5"]
+[ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="4_0at3r"]
+[ext_resource type="Resource" uid="uid://4v284omfw45w" path="res://data/bastiao.tres" id="5_ckosc"]
+[ext_resource type="Resource" uid="uid://dxtchife2kjqs" path="res://data/batedor.tres" id="6_awm7n"]
+[ext_resource type="Resource" uid="uid://ia3v7pp2ar8q" path="res://data/serpente.tres" id="7_ucw2e"]
+
+[node name="Principal" type="Node2D" unique_id=1697945304]
+script = ExtResource("1_6f3be")
+cena_tiro = ExtResource("2_j5742")
+cena_inimigo = ExtResource("3_0pxoi")
+tipos_inimigo = Array[ExtResource("4_0at3r")]([ExtResource("5_ckosc"), ExtResource("6_awm7n"), ExtResource("7_ucw2e")])
+
+[node name="Jogador" parent="." unique_id=732930375 instance=ExtResource("3_jccv5")]
+position = Vector2(240, 630)
+
+[node name="Tiros" type="Node2D" parent="." unique_id=1174081555]
+
+[node name="Inimigos" type="Node2D" parent="." unique_id=1393936982]
+
+[node name="TempoSpawn" type="Timer" parent="." unique_id=1330112160]
+autostart = true
+
+[node name="Placar" type="Label" parent="." unique_id=897707795]
+offset_left = 16.0
+offset_top = 10.0
+offset_right = 56.0
+offset_bottom = 33.0
+text = "0"
+
+[node name="Vidas" type="Label" parent="." unique_id=1066268087]
+offset_left = 360.0
+offset_top = 10.0
+offset_right = 400.0
+offset_bottom = 33.0
+
+[node name="Mensagem" type="Label" parent="." unique_id=144367220]
+offset_right = 40.0
+offset_bottom = 23.0

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://w825y8k508qu"]
+
+[ext_resource type="Script" uid="uid://ckf8gatult4t6" path="res://script/tiro.gd" id="1_l1twf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
+size = Vector2(5, 14)
+
+[node name="Tiro" type="Area2D" unique_id=1760000048]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_l1twf")
+
+[node name="Forma" type="CollisionShape2D" parent="." unique_id=155402709]
+shape = SubResource("RectangleShape2D_hjp0y")
+
+[node name="Desenho" type="Polygon2D" parent="." unique_id=1681045105]
+
+[node name="Notificador" type="VisibleOnScreenNotifier2D" parent="." unique_id=1554665838]

@@ -79,3 +79,7 @@ script = ExtResource("13_fj78b")
 [node name="Texto" type="Label" parent="Pausa" unique_id=2046210336]
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="BarraChefe" type="ProgressBar" parent="." unique_id=537961307]
+offset_right = 4.0
+offset_bottom = 27.0

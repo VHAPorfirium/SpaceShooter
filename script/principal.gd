@@ -13,6 +13,7 @@ var _fases: Array[DadosFase] = []
 var _fase_atual: int = 0
 var _estado: Estado = Estado.JOGANDO
 var _ondas_acabaram: bool = false
+var _chefe_ativo: bool = false
 var _pontos: int = 0
 var _recorde: int = 0
 
@@ -29,6 +30,7 @@ var _recorde: int = 0
 @onready var _poder_label: Label = $PoderLabel
 @onready var _fase_label: Label = $FaseLabel
 @onready var _mensagem: Label = $Mensagem
+@onready var _barra_chefe: ProgressBar = $BarraChefe
 
 
 func _ready() -> void:
@@ -50,6 +52,11 @@ func _ready() -> void:
 	_fase_label.size = Vector2(480, 24)
 	_fase_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 
+	_barra_chefe.position = Vector2(90, 40)
+	_barra_chefe.size = Vector2(300, 12)
+	_barra_chefe.show_percentage = false
+	_barra_chefe.visible = false
+
 	_recorde = Recorde.carregar()
 	_recorde_label.text = "Recorde %d" % _recorde
 	_poder_label.text = ""
@@ -61,7 +68,14 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if _estado == Estado.JOGANDO and _ondas_acabaram and _inimigos.get_child_count() == 0:
+	if _estado != Estado.JOGANDO or not _ondas_acabaram or _chefe_ativo:
+		return
+	if _inimigos.get_child_count() > 0:
+		return
+	var fase := _fases[_fase_atual]
+	if fase.chefe != null:
+		_iniciar_chefe(fase)
+	else:
 		_concluir_fase()
 
 
@@ -80,12 +94,25 @@ func _unhandled_input(event: InputEvent) -> void:
 func _iniciar_fase(indice: int) -> void:
 	_fase_atual = indice
 	_ondas_acabaram = false
+	_chefe_ativo = false
 	_estado = Estado.JOGANDO
 	var fase := _fases[indice]
 	RenderingServer.set_default_clear_color(fase.cor_fundo)
 	_fase_label.text = fase.nome
+	_barra_chefe.visible = false
 	_mensagem.visible = false
 	_gerenciador.iniciar(fase)
+
+
+func _iniciar_chefe(fase: DadosFase) -> void:
+	_chefe_ativo = true
+	var chefe: ChefeBase = fase.chefe.instantiate()
+	chefe.position = Vector2(240.0, -70.0)
+	chefe.vida_mudou.connect(_ao_vida_chefe_mudou)
+	chefe.derrotado.connect(_ao_chefe_derrotado)
+	chefe.disparou.connect(_ao_chefe_disparar)
+	_inimigos.add_child(chefe)
+	_fase_label.text = "Chefe: %s" % chefe.nome
 
 
 func _concluir_fase() -> void:
@@ -127,9 +154,30 @@ func _ao_jogador_disparar(posicao: Vector2, direcao: Vector2) -> void:
 
 
 func _ao_inimigo_disparar(posicao: Vector2) -> void:
-	var tiro: Area2D = cena_tiro_inimigo.instantiate()
+	var tiro: TiroInimigo = cena_tiro_inimigo.instantiate()
 	tiro.position = posicao
 	_tiros_inimigos.add_child(tiro)
+
+
+func _ao_chefe_disparar(posicao: Vector2, direcao: Vector2) -> void:
+	var tiro: TiroInimigo = cena_tiro_inimigo.instantiate()
+	tiro.position = posicao
+	tiro.direcao = direcao
+	_tiros_inimigos.add_child(tiro)
+
+
+func _ao_vida_chefe_mudou(vida: int, vida_maxima: int) -> void:
+	_barra_chefe.max_value = vida_maxima
+	_barra_chefe.value = vida
+	_barra_chefe.visible = true
+
+
+func _ao_chefe_derrotado(pontos: int, _posicao: Vector2) -> void:
+	_pontos += pontos
+	_placar.text = "Pontos %d" % _pontos
+	_chefe_ativo = false
+	_barra_chefe.visible = false
+	_concluir_fase()
 
 
 func _ao_inimigo_morrer(pontos: int, posicao: Vector2) -> void:
@@ -167,6 +215,7 @@ func _ao_jogador_destruido() -> void:
 func _finalizar_partida(titulo: String) -> void:
 	$Pausa.habilitada = false
 	_gerenciador.parar()
+	_barra_chefe.visible = false
 
 	var novo_recorde := _pontos > _recorde
 	if novo_recorde:

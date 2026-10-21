@@ -4,6 +4,7 @@ extends RefCounted
 const BATEDOR := preload("res://data/batedor.tres")
 const SERPENTE := preload("res://data/serpente.tres")
 const BASTIAO := preload("res://data/bastiao.tres")
+const SENTINELA := preload("res://scenes/sentinela.tscn")
 
 
 static func fase_1() -> DadosFase:
@@ -14,6 +15,7 @@ static func fase_1() -> DadosFase:
 	f.intervalo_inicial = 1.4
 	f.intervalo_final = 0.9
 	f.tipos.assign([BATEDOR, BATEDOR, BATEDOR, SERPENTE, BASTIAO])
+	f.chefe = SENTINELA
 	return f
 
 

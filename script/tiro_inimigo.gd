@@ -1,6 +1,9 @@
+class_name TiroInimigo
 extends Area2D
 
 @export var velocidade: float = 230.0
+
+var direcao: Vector2 = Vector2.DOWN
 
 
 func _ready() -> void:
@@ -11,4 +14,4 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	position.y += velocidade * delta
+	position += direcao * velocidade * delta

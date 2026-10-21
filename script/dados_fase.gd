@@ -7,3 +7,4 @@ extends Resource
 @export var intervalo_inicial: float = 1.4
 @export var intervalo_final: float = 0.8
 @export var tipos: Array[DadosInimigo] = []
+@export var chefe: PackedScene

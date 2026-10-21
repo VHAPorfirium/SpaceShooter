@@ -144,14 +144,18 @@ func _ao_receber_area(area: Area2D) -> void:
 		item.queue_free()
 		return
 
+	var eh_chefe := area.is_in_group("chefe")
+
 	if _tempo_escudo > 0.0:
-		area.queue_free()  # o escudo destrói o que encosta
+		if not eh_chefe:
+			area.queue_free()  # o escudo destrói o que encosta, menos o chefe
 		return
 
 	if not _invencivel.is_stopped():
 		return
 
-	area.queue_free()  # o inimigo some ao bater na nave
+	if not eh_chefe:
+		area.queue_free()  # o inimigo some ao bater na nave
 	vidas -= 1
 	vidas_mudaram.emit(vidas)
 

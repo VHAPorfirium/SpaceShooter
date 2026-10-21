@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://b1ekn4tdpyrm8" path="res://script/gerenciador_fase.gd" id="12_t8783"]
 [ext_resource type="Resource" uid="uid://dhgco1t4ylsq4" path="res://data/tiro_triplo.tres" id="12_xyofb"]
 [ext_resource type="Resource" uid="uid://cipdg5nnl827l" path="res://data/escudo.tres" id="13_cf5mm"]
+[ext_resource type="Script" uid="uid://bfup4d8q4t3ga" path="res://script/pausa.gd" id="13_fj78b"]
 [ext_resource type="Resource" uid="uid://dln3nqyp0p5uf" path="res://data/ajudante.tres" id="14_pvsfa"]
 
 [node name="Principal" type="Node2D" unique_id=1697945304]
@@ -69,5 +70,12 @@ wait_time = 3.0
 one_shot = true
 
 [node name="FaseLabel" type="Label" parent="." unique_id=1981784933]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Pausa" type="Node" parent="." unique_id=286382325]
+script = ExtResource("13_fj78b")
+
+[node name="Texto" type="Label" parent="Pausa" unique_id=2046210336]
 offset_right = 40.0
 offset_bottom = 23.0

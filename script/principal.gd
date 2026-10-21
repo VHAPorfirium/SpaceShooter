@@ -67,8 +67,14 @@ func _process(_delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	var terminou := _estado == Estado.FIM or _estado == Estado.VITORIA
-	if terminou and event.is_action_pressed("ui_accept"):
+	if not terminou:
+		return
+	if event.is_action_pressed("ui_accept"):
 		get_tree().reload_current_scene()
+	else:
+		var tecla := event as InputEventKey
+		if tecla != null and tecla.pressed and not tecla.echo and tecla.keycode == KEY_M:
+			get_tree().change_scene_to_file("res://scenes/menu.tscn")
 
 
 func _iniciar_fase(indice: int) -> void:
@@ -159,6 +165,7 @@ func _ao_jogador_destruido() -> void:
 
 
 func _finalizar_partida(titulo: String) -> void:
+	$Pausa.habilitada = false
 	_gerenciador.parar()
 
 	var novo_recorde := _pontos > _recorde
@@ -170,6 +177,6 @@ func _finalizar_partida(titulo: String) -> void:
 	var texto := "%s\nPontos %d\nRecorde %d" % [titulo, _pontos, _recorde]
 	if novo_recorde:
 		texto += "\nNOVO RECORDE!"
-	texto += "\nEnter para jogar de novo"
+	texto += "\nEnter: jogar de novo\nM: menu"
 	_mensagem.text = texto
 	_mensagem.visible = true

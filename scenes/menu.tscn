@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dy5x1hd8f4gsu"]
+
+[ext_resource type="Script" uid="uid://dumfg0ejc3tj6" path="res://script/menu.gd" id="1_yqeox"]
+
+[node name="Menu" type="Control" unique_id=380478875]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_yqeox")
+
+[node name="Titulo1" type="Label" parent="." unique_id=493660128]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Titulo2" type="Label" parent="." unique_id=528814479]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Instrucoes" type="Label" parent="." unique_id=356045892]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Recorde" type="Label" parent="." unique_id=729492420]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Iniciar" type="Label" parent="." unique_id=867852701]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

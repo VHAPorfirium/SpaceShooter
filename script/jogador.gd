@@ -28,6 +28,7 @@ var _ajudantes: Array[Node2D] = []
 
 func _ready() -> void:
 	vidas = vidas_iniciais
+	add_to_group("jogador")
 	$Desenho.polygon = PackedVector2Array([
 		Vector2(0, -18), Vector2(15, 16), Vector2(5, 10),
 		Vector2(-5, 10), Vector2(-15, 16)])

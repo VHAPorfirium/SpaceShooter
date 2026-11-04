@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://infrkuxpcxaa"]
+
+[ext_resource type="Script" uid="uid://cdm71xdgv3jp7" path="res://script/ceifador.gd" id="1_g5agv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
+size = Vector2(100, 54)
+
+[node name="Ceifador" type="Area2D" unique_id=391691570]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_g5agv")
+
+[node name="Forma" type="CollisionShape2D" parent="." unique_id=1797006073]
+shape = SubResource("RectangleShape2D_hjp0y")
+
+[node name="Desenho" type="Polygon2D" parent="." unique_id=1968564667]

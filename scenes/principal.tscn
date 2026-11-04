@@ -21,6 +21,7 @@ cena_tiro_inimigo = ExtResource("3_ckosc")
 cena_inimigo = ExtResource("3_0pxoi")
 cena_item = ExtResource("5_nb6mp")
 poderes = Array[ExtResource("10_pvsfa")]([ExtResource("11_v36gc"), ExtResource("12_xyofb"), ExtResource("13_cf5mm"), ExtResource("14_pvsfa")])
+chance_drop = 0.15
 
 [node name="Jogador" parent="." unique_id=732930375 instance=ExtResource("3_jccv5")]
 position = Vector2(240, 630)

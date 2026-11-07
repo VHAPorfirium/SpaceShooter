@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dh4k6yoglksxt"]
+
+[ext_resource type="Script" uid="uid://c5r8qc4k57sb2" path="res://script/ajudante.gd" id="1_bsyia"]
+
+[node name="Ajudante" type="Node2D" unique_id=1946358928]
+script = ExtResource("1_bsyia")
+
+[node name="Desenho" type="Polygon2D" parent="." unique_id=88798574]

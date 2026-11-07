@@ -14,3 +14,5 @@ enum Forma { TRIANGULO, SETA, BLOCO }
 @export var movimento: Movimento = Movimento.RETO
 @export var amplitude: float = 70.0
 @export var frequencia: float = 3.0
+@export var atira: bool = false
+@export var intervalo_tiro: float = 1.4

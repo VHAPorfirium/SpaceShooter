@@ -4,10 +4,12 @@
 
 [resource]
 script = ExtResource("1_0pm12")
+nome = "Bastiao"
 vida = 3
 velocidade = 55.0
 pontos = 50
 cor = Color(1, 0.62352943, 0.27058825, 1)
 forma = 2
 tamanho = Vector2(38, 34)
+atira = true
 metadata/_custom_type_script = "uid://ceelcslf8dq6m"

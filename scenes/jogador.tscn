@@ -1,13 +1,15 @@
 [gd_scene format=3 uid="uid://csj1h2r4aok2r"]
 
 [ext_resource type="Script" uid="uid://bfndl7iyhnhq3" path="res://script/jogador.gd" id="1_vwxko"]
+[ext_resource type="PackedScene" uid="uid://dh4k6yoglksxt" path="res://scenes/ajudante.tscn" id="2_uahlj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
 size = Vector2(30, 34)
 
 [node name="Jogador" type="Area2D" unique_id=71321924]
-collision_mask = 4
+collision_mask = 28
 script = ExtResource("1_vwxko")
+cena_ajudante = ExtResource("2_uahlj")
 
 [node name="Forma" type="CollisionShape2D" parent="." unique_id=1938640247]
 shape = SubResource("RectangleShape2D_hjp0y")

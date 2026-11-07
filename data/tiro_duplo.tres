@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="DadosPoder" format=3 uid="uid://cr8s2k8cy83pu"]
+
+[ext_resource type="Script" uid="uid://dmudhv7kjtr3o" path="res://script/dados_poder.gd" id="1_ifbry"]
+
+[resource]
+script = ExtResource("1_ifbry")
+nome = "Tiro Duplo"
+cor = Color(0.48235294, 0.84705883, 0.56078434, 1)
+metadata/_custom_type_script = "uid://dmudhv7kjtr3o"

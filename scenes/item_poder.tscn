@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://45w5n6lhbmof"]
+
+[ext_resource type="Script" uid="uid://b36uspkooe4gl" path="res://script/item_poder.gd" id="1_22rh2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_d5qys"]
+radius = 11.0
+
+[node name="Area2D" type="Area2D" unique_id=925682238]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("1_22rh2")
+
+[node name="Desenho" type="Polygon2D" parent="." unique_id=1526644638]
+
+[node name="Forma" type="CollisionShape2D" parent="." unique_id=223415595]
+shape = SubResource("CircleShape2D_d5qys")
+
+[node name="Notificador" type="VisibleOnScreenNotifier2D" parent="." unique_id=1677975604]
+
+[node name="Rotulo" type="Label" parent="." unique_id=349462217]
+offset_right = 40.0
+offset_bottom = 23.0

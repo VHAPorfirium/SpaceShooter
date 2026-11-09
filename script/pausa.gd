@@ -16,15 +16,16 @@ func _ready() -> void:
 	_texto.text = "PAUSADO\nP ou Esc: continuar\nM: voltar ao menu"
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	var tecla := event as InputEventKey
+	if tecla == null or not tecla.pressed or tecla.echo:
+		return
 	if not habilitada:
 		return
-	if event.is_action_pressed("pausa"):
+	if tecla.keycode == KEY_P or tecla.keycode == KEY_ESCAPE:
 		_alternar()
 		get_viewport().set_input_as_handled()
-		return
-	var tecla := event as InputEventKey
-	if get_tree().paused and tecla != null and tecla.pressed and not tecla.echo and tecla.keycode == KEY_M:
+	elif get_tree().paused and tecla.keycode == KEY_M:
 		get_tree().paused = false
 		get_tree().change_scene_to_file("res://scenes/menu.tscn")
 

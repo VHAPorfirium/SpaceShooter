@@ -14,6 +14,7 @@ config/name="Space Shooter"
 run/main_scene="uid://dy5x1hd8f4gsu"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+config/windows_native_icon="res://assets/icone/space_shooter.ico"
 
 [autoload]
 

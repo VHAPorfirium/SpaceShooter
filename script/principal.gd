@@ -48,6 +48,7 @@ var _aceita_reinicio: bool = false
 @onready var _mensagem: Label = $Mensagem
 @onready var _barra_chefe: ProgressBar = $BarraChefe
 @onready var _fundo_estrelado: FundoEstrelado = $FundoEstrelado
+@onready var _cenario: CenarioRolante = $Cenario
 @onready var _efeitos: Node2D = $Efeitos
 @onready var _flash_de_dano: FlashDeDano = $FlashDeDano
 
@@ -157,6 +158,8 @@ func _iniciar_fase(indice: int) -> void:
 	var fase := _fases[indice]
 	RenderingServer.set_default_clear_color(fase.cor_fundo)
 	_fundo_estrelado.definir_cor_das_estrelas(fase.cor_estrelas)
+	_cenario.definir_camadas(fase.camadas_do_cenario)
+	_fundo_estrelado.visible = not _cenario.tem_camadas()  # plano B: estrelas em código
 	_fase_label.text = fase.nome
 	_barra_chefe.visible = false
 	_mensagem.visible = false

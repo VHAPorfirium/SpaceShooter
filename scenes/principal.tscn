@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://b1ekn4tdpyrm8" path="res://script/gerenciador_fase.gd" id="12_t8783"]
 [ext_resource type="Script" uid="uid://bfup4d8q4t3ga" path="res://script/pausa.gd" id="13_fj78b"]
 [ext_resource type="Script" uid="uid://dc718kuiyklj0" path="res://script/fundo_estrelado.gd" id="14_fundo"]
+[ext_resource type="Script" uid="uid://dwp2finh1guiy" path="res://script/cenario_rolante.gd" id="20_cenario"]
 [ext_resource type="Script" uid="uid://d1coybwjgnngo" path="res://script/flash_de_dano.gd" id="15_flash"]
 [ext_resource type="SpriteFrames" path="res://data/efeitos/explosao_pequena.tres" id="16_explosao_pequena"]
 [ext_resource type="SpriteFrames" path="res://data/efeitos/explosao_grande.tres" id="17_explosao_grande"]
@@ -25,6 +26,9 @@ chance_drop = 0.15
 quadros_explosao_pequena = ExtResource("16_explosao_pequena")
 quadros_explosao_grande = ExtResource("17_explosao_grande")
 quadros_acerto = ExtResource("18_acerto")
+
+[node name="Cenario" type="Node2D" parent="." unique_id=1590417263]
+script = ExtResource("20_cenario")
 
 [node name="FundoEstrelado" type="Node2D" parent="." unique_id=1514568824]
 script = ExtResource("14_fundo")

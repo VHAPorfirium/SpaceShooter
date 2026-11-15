@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" uid="uid://br4sks2asr6p6" path="res://script/colmeia.gd" id="1_v72jx"]
+[ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i5085"]
 size = Vector2(124, 76)
@@ -14,3 +15,6 @@ script = ExtResource("1_v72jx")
 shape = SubResource("RectangleShape2D_i5085")
 
 [node name="Desenho" type="Polygon2D" parent="." unique_id=849728227]
+
+[node name="Imagem" type="Sprite2D" parent="." unique_id=727763166]
+script = ExtResource("90_imagem")

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b8dh0dnbefbrg"]
 
 [ext_resource type="Script" uid="uid://5dne53c5tmgw" path="res://script/sentinela.gd" id="1_hk65u"]
+[ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
 size = Vector2(88, 58)
@@ -14,3 +15,6 @@ script = ExtResource("1_hk65u")
 shape = SubResource("RectangleShape2D_hjp0y")
 
 [node name="Desenho" type="Polygon2D" parent="." unique_id=16957102]
+
+[node name="Imagem" type="Sprite2D" parent="." unique_id=1866425269]
+script = ExtResource("90_imagem")

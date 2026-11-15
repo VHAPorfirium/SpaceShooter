@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bfndl7iyhnhq3" path="res://script/jogador.gd" id="1_vwxko"]
 [ext_resource type="PackedScene" uid="uid://dh4k6yoglksxt" path="res://scenes/ajudante.tscn" id="2_uahlj"]
+[ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
 size = Vector2(30, 34)
@@ -15,6 +16,9 @@ cena_ajudante = ExtResource("2_uahlj")
 shape = SubResource("RectangleShape2D_hjp0y")
 
 [node name="Desenho" type="Polygon2D" parent="." unique_id=1816055626]
+
+[node name="Imagem" type="Sprite2D" parent="." unique_id=1816087198]
+script = ExtResource("90_imagem")
 
 [node name="Ponta" type="Marker2D" parent="." unique_id=591815300]
 position = Vector2(0, -20)

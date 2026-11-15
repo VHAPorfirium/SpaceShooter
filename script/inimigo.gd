@@ -36,6 +36,7 @@ func _ready() -> void:
 	_x_inicial = position.x
 	$Desenho.polygon = PackedVector2Array(FORMAS[dados.forma])
 	$Desenho.color = dados.cor
+	$Imagem.exibir(dados.textura, dados.tamanho, [$Desenho])
 	var forma_colisao := RectangleShape2D.new()
 	forma_colisao.size = dados.tamanho
 	$Forma.shape = forma_colisao
@@ -50,6 +51,7 @@ func _process(delta: float) -> void:
 		position.x = _x_inicial + sin(_tempo * dados.frequencia) * dados.amplitude
 	if dados.velocidade_giro != 0.0:
 		$Desenho.rotation += dados.velocidade_giro * delta
+		$Imagem.rotation += dados.velocidade_giro * delta
 
 	if dados.atira:
 		_tempo_tiro -= delta

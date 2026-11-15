@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://w825y8k508qu"]
 
 [ext_resource type="Script" uid="uid://ckf8gatult4t6" path="res://script/tiro.gd" id="1_l1twf"]
+[ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
 size = Vector2(5, 14)
@@ -14,5 +15,8 @@ script = ExtResource("1_l1twf")
 shape = SubResource("RectangleShape2D_hjp0y")
 
 [node name="Desenho" type="Polygon2D" parent="." unique_id=1681045105]
+
+[node name="Imagem" type="Sprite2D" parent="." unique_id=616455894]
+script = ExtResource("90_imagem")
 
 [node name="Notificador" type="VisibleOnScreenNotifier2D" parent="." unique_id=1554665838]

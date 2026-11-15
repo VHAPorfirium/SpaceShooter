@@ -18,6 +18,8 @@ const LIMITE_DIREITO_DA_PATRULHA := 420.0
 @export var vida_maxima: int = 50
 @export var pontos: int = 300
 @export var altura_parada: float = 110.0
+## Arte do chefe. Vazio = desenho geométrico definido por cada chefe.
+@export var textura: Texture2D
 ## Frações da vida em que o chefe passa para a próxima etapa.
 ## Ex.: [0.66, 0.33] = 3 etapas (troca com 66% e com 33% da vida). Vazio = 1 etapa.
 @export var limites_das_etapas: Array[float] = []
@@ -33,6 +35,7 @@ func _ready() -> void:
 	add_to_group("chefe")
 	vida = vida_maxima
 	area_entered.connect(_ao_receber_area)
+	$Imagem.exibir(textura, $Forma.shape.size, [$Desenho])
 	vida_mudou.emit(vida, vida_maxima)
 
 

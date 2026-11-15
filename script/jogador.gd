@@ -14,6 +14,8 @@ const SLOTS_AJUDANTES := [Vector2(-36, 8), Vector2(36, 8)]
 @export var velocidade: float = 340.0
 @export var vidas_iniciais: int = 3
 @export var cena_ajudante: PackedScene
+## Arte da nave. Vazio = desenho geométrico.
+@export var textura: Texture2D
 
 var vidas: int
 var _modo_tiro: ModoTiro = ModoTiro.SIMPLES
@@ -34,6 +36,7 @@ func _ready() -> void:
 		Vector2(0, -18), Vector2(15, 16), Vector2(5, 10),
 		Vector2(-5, 10), Vector2(-15, 16)])
 	$Desenho.color = Color("#5ee7ff")
+	$Imagem.exibir(textura, $Forma.shape.size, [$Desenho])
 	area_entered.connect(_ao_receber_area)
 
 
@@ -49,7 +52,12 @@ func _process(delta: float) -> void:
 	_atualizar_poderes(delta)
 
 	# Pisca enquanto está invencível
-	$Desenho.visible = _invencivel.is_stopped() or int(_invencivel.time_left * 12.0) % 2 == 0
+	_visual_ativo().visible = _invencivel.is_stopped() or int(_invencivel.time_left * 12.0) % 2 == 0
+
+
+## O nó que está aparecendo na tela: a arte, se houver, ou o desenho geométrico.
+func _visual_ativo() -> CanvasItem:
+	return $Imagem if $Imagem.usa_textura() else $Desenho
 
 
 func _draw() -> void:

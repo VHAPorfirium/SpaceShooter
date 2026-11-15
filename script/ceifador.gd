@@ -75,6 +75,7 @@ func _mover_lateral(delta: float) -> void:
 func _iniciar_aviso() -> void:
 	_estado = Estado.AVISO
 	_tempo = tempo_aviso
+	aviso_iniciado.emit()
 	_alvo_x = position.x
 	var jogador := get_tree().get_first_node_in_group("jogador") as Node2D
 	if jogador != null:

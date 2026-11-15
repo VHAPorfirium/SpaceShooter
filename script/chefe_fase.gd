@@ -4,6 +4,7 @@ extends Area2D
 signal vida_mudou(vida: int, vida_maxima: int)
 signal derrotado(pontos: int, posicao: Vector2)
 signal disparou(posicao: Vector2, direcao: Vector2)
+signal aviso_iniciado  # o chefe vai fazer um ataque forte (telegrafar)
 
 @export var nome: String = "Chefe"
 @export var vida_maxima: int = 50

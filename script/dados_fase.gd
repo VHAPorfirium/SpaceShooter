@@ -8,3 +8,5 @@ extends Resource
 @export var intervalo_final: float = 0.8
 @export var tipos: Array[DadosInimigo] = []
 @export var chefe: PackedScene
+@export var musica: AudioStream
+@export var musica_chefe: AudioStream

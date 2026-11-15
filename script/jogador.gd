@@ -3,6 +3,7 @@ extends Area2D
 signal disparou(posicao: Vector2, direcao: Vector2)
 signal vidas_mudaram(vidas: int)
 signal poderes_mudaram(texto: String)
+signal poder_coletado(poder: DadosPoder)
 signal destruida
 
 enum ModoTiro { SIMPLES, DUPLO, TRIPLO }
@@ -142,6 +143,7 @@ func _ao_receber_area(area: Area2D) -> void:
 	var item := area as ItemPoder
 	if item != null:
 		aplicar_poder(item.dados)
+		poder_coletado.emit(item.dados)
 		item.queue_free()
 		return
 

@@ -5,6 +5,10 @@ enum Movimento { RETO, ZIGZAG }
 enum Forma { TRIANGULO, SETA, BLOCO, ROCHA }
 
 @export var nome: String = "Batedor"
+## Arte do inimigo. Vazio = usa o desenho geométrico (forma e cor abaixo).
+@export var textura: Texture2D
+## Arte mostrada depois do primeiro tiro (ex.: Bastião rachado). Vazio = não muda.
+@export var textura_dano: Texture2D
 @export var vida: int = 1
 @export var velocidade: float = 110.0
 @export var pontos: int = 10

@@ -1,0 +1,34 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" uid="uid://gm7yoeq3bc6n" path="res://assets/arte/05_efeitos/explosao_pequena_01.svg" id="1_quadro"]
+[ext_resource type="Texture2D" uid="uid://dgd2rmfbfeb8e" path="res://assets/arte/05_efeitos/explosao_pequena_02.svg" id="2_quadro"]
+[ext_resource type="Texture2D" uid="uid://bauwav5s3qobh" path="res://assets/arte/05_efeitos/explosao_pequena_03.svg" id="3_quadro"]
+[ext_resource type="Texture2D" uid="uid://s85tx5s0x86t" path="res://assets/arte/05_efeitos/explosao_pequena_04.svg" id="4_quadro"]
+[ext_resource type="Texture2D" uid="uid://doa4wc4ahvt05" path="res://assets/arte/05_efeitos/explosao_pequena_05.svg" id="5_quadro"]
+[ext_resource type="Texture2D" uid="uid://cyub0m7vvrsmk" path="res://assets/arte/05_efeitos/explosao_pequena_06.svg" id="6_quadro"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_quadro")
+}],
+"loop": false,
+"name": &"default",
+"speed": 14.0
+}]

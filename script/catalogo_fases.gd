@@ -8,6 +8,8 @@ const BATEDOR := preload("res://data/batedor.tres")
 const SERPENTE := preload("res://data/serpente.tres")
 const BASTIAO := preload("res://data/bastiao.tres")
 const ASTEROIDE := preload("res://data/asteroide.tres")
+const ASTEROIDE_MEDIO := preload("res://data/asteroide_medio.tres")
+const ASTEROIDE_GRANDE := preload("res://data/asteroide_grande.tres")
 
 const TIRO_DUPLO := preload("res://data/tiro_duplo.tres")
 const TIRO_TRIPLO := preload("res://data/tiro_triplo.tres")
@@ -17,6 +19,12 @@ const AJUDANTE := preload("res://data/ajudante.tres")
 const SENTINELA := preload("res://scenes/sentinela.tscn")
 const CEIFADOR := preload("res://scenes/ceifador.tscn")
 const COLMEIA := preload("res://scenes/colmeia.tscn")
+
+const CENARIOS := "res://assets/arte/06_cenarios/"
+## Velocidades das camadas (px/s): fundo distante, camada do meio, camada mais próxima.
+const VELOCIDADE_FUNDO := 20.0
+const VELOCIDADE_MEIO := 50.0
+const VELOCIDADE_PERTO := 110.0
 
 const MUSICA_FASE_1 := preload("res://assets/audio/musicas/fase_1.wav")
 const MUSICA_FASE_2 := preload("res://assets/audio/musicas/fase_2.wav")
@@ -37,6 +45,7 @@ static func fase_1() -> DadosFase:
 	fase.nome = "Fase 1: Órbita da Terra"
 	fase.cor_fundo = Color("#0d1b3a")
 	fase.cor_estrelas = Color("#9fc5ff")
+	fase.camadas_do_cenario.assign(_cenario("fase1_fundo", "fase1_estrelas_longe", "fase1_estrelas_perto"))
 	fase.frase_de_abertura = "A defesa orbital caiu.\nO último caça decola."
 	fase.poderes.assign([TIRO_DUPLO, TIRO_TRIPLO])
 	fase.chefe = SENTINELA
@@ -75,12 +84,13 @@ static func fase_1() -> DadosFase:
 
 
 ## Cinturão de asteroides: Batedores e Serpentes. Ensina formações e movimento lateral.
-## Asteroides (4 de vida, giram devagar) atravessam o caminho como perigo extra.
+## Asteroides em 3 tamanhos (pequeno, médio e grande: mais vida e pontos) atravessam o caminho como perigo extra.
 static func fase_2() -> DadosFase:
 	var fase := DadosFase.new()
 	fase.nome = "Fase 2: Cinturão de asteroides"
 	fase.cor_fundo = Color("#2a1a12")
 	fase.cor_estrelas = Color("#ffcf9f")
+	fase.camadas_do_cenario.assign(_cenario("fase2_fundo", "fase2_estrelas_longe", "fase2_rochas"))
 	fase.frase_de_abertura = "A frota recua para o cinturão\nde asteroides e se esconde\nentre as rochas."
 	fase.poderes.assign([ESCUDO, AJUDANTE])
 	fase.chefe = CEIFADOR
@@ -100,14 +110,14 @@ static func fase_2() -> DadosFase:
 		_onda(36.0, LINHA, SERPENTE, 3, 90.0, CENTRO),
 		_onda(42.0, FLANCOS, SERPENTE, 4, 70.0),
 		_onda(48.0, V, BATEDOR, 7, 40.0, CENTRO),
-		_onda(52.0, LINHA, ASTEROIDE, 2, 220.0, CENTRO),
+		_onda(52.0, LINHA, ASTEROIDE_MEDIO, 2, 220.0, CENTRO),
 		# respiro
 		# Bloco 3
 		_onda(60.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
 		_onda(64.0, V, BATEDOR, 5, 45.0, ESQUERDA),
 		_onda(66.0, V, BATEDOR, 5, 45.0, DIREITA),
 		_onda(72.0, FLANCOS, SERPENTE, 6, 65.0),
-		_onda(75.0, LINHA, ASTEROIDE, 1, 0.0, CENTRO),
+		_onda(75.0, LINHA, ASTEROIDE_GRANDE, 1, 0.0, CENTRO),
 		_onda(78.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
 		_onda(80.0, V, SERPENTE, 5, 55.0, CENTRO),
 		# respiro
@@ -123,7 +133,7 @@ static func fase_2() -> DadosFase:
 		_onda(122.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
 		_onda(125.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
 		_onda(128.0, FLANCOS, SERPENTE, 6, 65.0),
-		_onda(130.0, LINHA, ASTEROIDE, 1, 0.0, 340.0),
+		_onda(130.0, LINHA, ASTEROIDE_MEDIO, 1, 0.0, 340.0),
 		_onda(133.0, V, BATEDOR, 7, 40.0, CENTRO),
 		_onda(135.0, V, SERPENTE, 5, 55.0, CENTRO),
 		_onda(140.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
@@ -147,6 +157,7 @@ static func fase_3() -> DadosFase:
 	fase.nome = "Fase 3: Nave-Mãe"
 	fase.cor_fundo = Color("#2b0d24")
 	fase.cor_estrelas = Color("#ff9fd8")
+	fase.camadas_do_cenario.assign(_cenario("fase3_fundo", "fase3_estrelas_longe", "fase3_estruturas"))
 	fase.frase_de_abertura = "A Nave-Mãe Colmeia\nse aproxima da Terra.\nÉ agora ou nunca."
 	fase.poderes.assign([TIRO_DUPLO, TIRO_TRIPLO, ESCUDO, AJUDANTE])
 	fase.chefe = COLMEIA
@@ -193,6 +204,17 @@ static func fase_3() -> DadosFase:
 		_onda(150.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
 	])
 	return fase
+
+
+## Monta as 3 camadas do cenário a partir dos nomes dos SVGs em assets/arte/06_cenarios/.
+static func _cenario(arquivo_fundo: String, arquivo_meio: String, arquivo_perto: String) -> Array[DadosCamadaCenario]:
+	var camadas: Array[DadosCamadaCenario] = []
+	for par in [[arquivo_fundo, VELOCIDADE_FUNDO], [arquivo_meio, VELOCIDADE_MEIO], [arquivo_perto, VELOCIDADE_PERTO]]:
+		var camada := DadosCamadaCenario.new()
+		camada.textura = load(CENARIOS + par[0] + ".svg")
+		camada.velocidade_px_por_segundo = par[1]
+		camadas.append(camada)
+	return camadas
 
 
 static func _onda(momento_segundos: float, formacao: DadosOnda.Formacao, tipo_inimigo: DadosInimigo,

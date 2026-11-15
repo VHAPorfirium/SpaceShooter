@@ -10,10 +10,15 @@ enum ModoTiro { SIMPLES, DUPLO, TRIPLO }
 
 const MAX_AJUDANTES := 2
 const SLOTS_AJUDANTES := [Vector2(-36, 8), Vector2(36, 8)]
+const TAMANHO_DO_ESCUDO_NA_TELA := Vector2(56, 56)
 
 @export var velocidade: float = 340.0
 @export var vidas_iniciais: int = 3
 @export var cena_ajudante: PackedScene
+## Arte da nave. Vazio = desenho geométrico.
+@export var textura: Texture2D
+## Arte do anel de escudo. Vazio = círculo desenhado em código.
+@export var textura_escudo: Texture2D
 
 var vidas: int
 var _modo_tiro: ModoTiro = ModoTiro.SIMPLES
@@ -34,6 +39,10 @@ func _ready() -> void:
 		Vector2(0, -18), Vector2(15, 16), Vector2(5, 10),
 		Vector2(-5, 10), Vector2(-15, 16)])
 	$Desenho.color = Color("#5ee7ff")
+	$Imagem.exibir(textura, $Forma.shape.size, [$Desenho])
+	if textura_escudo != null:
+		$Escudo.texture = textura_escudo
+		$Escudo.scale = TAMANHO_DO_ESCUDO_NA_TELA / textura_escudo.get_size()
 	area_entered.connect(_ao_receber_area)
 
 
@@ -49,11 +58,25 @@ func _process(delta: float) -> void:
 	_atualizar_poderes(delta)
 
 	# Pisca enquanto está invencível
-	$Desenho.visible = _invencivel.is_stopped() or int(_invencivel.time_left * 12.0) % 2 == 0
+	var visivel_neste_quadro := _invencivel.is_stopped() or int(_invencivel.time_left * 12.0) % 2 == 0
+	_visual_ativo().visible = visivel_neste_quadro
+	$Motor.visible = visivel_neste_quadro
+
+
+## O nó que está aparecendo na tela: a arte, se houver, ou o desenho geométrico.
+func _visual_ativo() -> CanvasItem:
+	return $Imagem if $Imagem.usa_textura() else $Desenho
+
+
+func _atualizar_visual_do_escudo() -> void:
+	if textura_escudo != null:
+		$Escudo.visible = _tempo_escudo > 0.0
+	else:
+		queue_redraw()  # plano B: o anel é desenhado em _draw()
 
 
 func _draw() -> void:
-	if _tempo_escudo > 0.0:
+	if _tempo_escudo > 0.0 and textura_escudo == null:
 		draw_arc(Vector2.ZERO, 26.0, 0.0, TAU, 32, Color("#5ee7ff"), 2.0)
 
 
@@ -90,7 +113,7 @@ func aplicar_poder(poder: DadosPoder) -> void:
 			_tempo_modo = poder.duracao
 		DadosPoder.Tipo.ESCUDO:
 			_tempo_escudo = poder.duracao
-			queue_redraw()
+			_atualizar_visual_do_escudo()
 		DadosPoder.Tipo.AJUDANTE:
 			_adicionar_ajudante()
 
@@ -118,7 +141,7 @@ func _atualizar_poderes(delta: float) -> void:
 	if _tempo_escudo > 0.0:
 		_tempo_escudo -= delta
 		if _tempo_escudo <= 0.0:
-			queue_redraw()
+			_atualizar_visual_do_escudo()
 
 	var texto := _texto_poderes()
 	if texto != _ultimo_texto:
@@ -167,7 +190,7 @@ func _ao_receber_area(area: Area2D) -> void:
 	_tempo_modo = 0.0
 	_tempo_escudo = 0.0
 	_remover_ajudantes()
-	queue_redraw()
+	_atualizar_visual_do_escudo()
 
 	if vidas <= 0:
 		destruida.emit()

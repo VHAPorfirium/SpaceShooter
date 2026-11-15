@@ -4,6 +4,8 @@ extends Area2D
 @export var dados: DadosPoder
 @export var velocidade: float = 90.0
 
+const TAMANHO_NA_TELA := Vector2(22, 22)
+
 
 func _ready() -> void:
 	if dados == null:
@@ -25,6 +27,7 @@ func _ready() -> void:
 	$Rotulo.add_theme_font_size_override("font_size", 11)
 	$Rotulo.add_theme_color_override("font_color", Color("#14102b"))
 
+	$Imagem.exibir(dados.textura, TAMANHO_NA_TELA, [$Desenho, $Rotulo])
 	$Notificador.screen_exited.connect(queue_free)
 
 

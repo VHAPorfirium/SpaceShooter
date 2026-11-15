@@ -2,19 +2,56 @@
 
 [ext_resource type="Script" uid="uid://bfndl7iyhnhq3" path="res://script/jogador.gd" id="1_vwxko"]
 [ext_resource type="PackedScene" uid="uid://dh4k6yoglksxt" path="res://scenes/ajudante.tscn" id="2_uahlj"]
+[ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
+[ext_resource type="Texture2D" uid="uid://bcgr2ry3281ox" path="res://assets/arte/01_jogador/jogador.svg" id="91_nave"]
+[ext_resource type="Texture2D" uid="uid://d58bsaw6deh5" path="res://assets/arte/01_jogador/jogador_escudo.svg" id="92_escudo"]
+[ext_resource type="Texture2D" uid="uid://cgjxyleiwrw44" path="res://assets/arte/01_jogador/jogador_motor_01.svg" id="93_motor1"]
+[ext_resource type="Texture2D" uid="uid://blsta4tnc6swe" path="res://assets/arte/01_jogador/jogador_motor_02.svg" id="94_motor2"]
+[ext_resource type="Texture2D" uid="uid://c8r3wfu8lf8a0" path="res://assets/arte/01_jogador/jogador_motor_03.svg" id="95_motor3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
 size = Vector2(30, 34)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_motor"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("93_motor1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_motor2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_motor3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_motor2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 14.0
+}]
 
 [node name="Jogador" type="Area2D" unique_id=71321924]
 collision_mask = 28
 script = ExtResource("1_vwxko")
 cena_ajudante = ExtResource("2_uahlj")
+textura = ExtResource("91_nave")
+textura_escudo = ExtResource("92_escudo")
 
 [node name="Forma" type="CollisionShape2D" parent="." unique_id=1938640247]
 shape = SubResource("RectangleShape2D_hjp0y")
 
+[node name="Motor" type="AnimatedSprite2D" parent="." unique_id=1203948571]
+position = Vector2(0, 22)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_motor")
+autoplay = "default"
+
 [node name="Desenho" type="Polygon2D" parent="." unique_id=1816055626]
+
+[node name="Imagem" type="Sprite2D" parent="." unique_id=1816087198]
+script = ExtResource("90_imagem")
 
 [node name="Ponta" type="Marker2D" parent="." unique_id=591815300]
 position = Vector2(0, -20)
@@ -26,3 +63,7 @@ one_shot = true
 [node name="Invencivel" type="Timer" parent="." unique_id=2022382403]
 wait_time = 1.5
 one_shot = true
+
+[node name="Escudo" type="Sprite2D" parent="." unique_id=1677723410]
+visible = false
+z_index = 1

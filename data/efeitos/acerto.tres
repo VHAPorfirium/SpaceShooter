@@ -1,0 +1,22 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" uid="uid://jv8b84vb8hoe" path="res://assets/arte/05_efeitos/acerto_01.svg" id="1_quadro"]
+[ext_resource type="Texture2D" uid="uid://dsdfvjl86r62" path="res://assets/arte/05_efeitos/acerto_02.svg" id="2_quadro"]
+[ext_resource type="Texture2D" uid="uid://dmom2ttgxvtq3" path="res://assets/arte/05_efeitos/acerto_03.svg" id="3_quadro"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_quadro")
+}],
+"loop": false,
+"name": &"default",
+"speed": 24.0
+}]

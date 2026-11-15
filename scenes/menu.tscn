@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://dumfg0ejc3tj6" path="res://script/menu.gd" id="1_yqeox"]
 [ext_resource type="Script" uid="uid://dc718kuiyklj0" path="res://script/fundo_estrelado.gd" id="2_fundo"]
+[ext_resource type="Texture2D" uid="uid://cneb2rscorbvu" path="res://assets/arte/07_interface/menu_fundo.svg" id="3_menu_fundo"]
+[ext_resource type="Texture2D" uid="uid://cwxbo1tsdan85" path="res://assets/arte/07_interface/logo.svg" id="4_logo"]
 
 [node name="Menu" type="Control" unique_id=380478875]
 layout_mode = 3
@@ -9,9 +11,22 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_yqeox")
+imagem_de_fundo = ExtResource("3_menu_fundo")
+logo = ExtResource("4_logo")
+
+[node name="Fundo" type="TextureRect" parent="." unique_id=1112223334]
+layout_mode = 0
+expand_mode = 1
+mouse_filter = 2
 
 [node name="FundoEstrelado" type="Node2D" parent="." unique_id=356468133]
 script = ExtResource("2_fundo")
+
+[node name="Logo" type="TextureRect" parent="." unique_id=1445556667]
+layout_mode = 0
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
 
 [node name="Titulo1" type="Label" parent="." unique_id=493660128]
 layout_mode = 0

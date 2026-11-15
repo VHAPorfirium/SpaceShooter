@@ -1,7 +1,10 @@
 [gd_resource type="Resource" script_class="DadosInimigo" format=3 uid="uid://dxtchife2kjqs"]
 
 [ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="1_4bjsf"]
+[ext_resource type="Texture2D" uid="uid://c53hb4tytutno" path="res://assets/arte/02_inimigos/batedor.svg" id="2_arte"]
 
 [resource]
 script = ExtResource("1_4bjsf")
+nome = "Batedor"
+textura = ExtResource("2_arte")
 metadata/_custom_type_script = "uid://ceelcslf8dq6m"

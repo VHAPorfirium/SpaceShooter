@@ -1,0 +1,42 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" uid="uid://c2xkmf55cpoam" path="res://assets/arte/05_efeitos/explosao_grande_01.svg" id="1_quadro"]
+[ext_resource type="Texture2D" uid="uid://cqykih4smhy8p" path="res://assets/arte/05_efeitos/explosao_grande_02.svg" id="2_quadro"]
+[ext_resource type="Texture2D" uid="uid://8ufo5fl2r64n" path="res://assets/arte/05_efeitos/explosao_grande_03.svg" id="3_quadro"]
+[ext_resource type="Texture2D" uid="uid://hny2m7cdojdk" path="res://assets/arte/05_efeitos/explosao_grande_04.svg" id="4_quadro"]
+[ext_resource type="Texture2D" uid="uid://dqd4rto8wxrhb" path="res://assets/arte/05_efeitos/explosao_grande_05.svg" id="5_quadro"]
+[ext_resource type="Texture2D" uid="uid://cepko05agj8ph" path="res://assets/arte/05_efeitos/explosao_grande_06.svg" id="6_quadro"]
+[ext_resource type="Texture2D" uid="uid://ccnau6njqgfru" path="res://assets/arte/05_efeitos/explosao_grande_07.svg" id="7_quadro"]
+[ext_resource type="Texture2D" uid="uid://783divtku2ux" path="res://assets/arte/05_efeitos/explosao_grande_08.svg" id="8_quadro"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_quadro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_quadro")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]

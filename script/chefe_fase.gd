@@ -10,6 +10,7 @@ signal disparou(posicao: Vector2, direcao: Vector2)
 signal aviso_iniciado  # o chefe vai fazer um ataque forte (telegrafar)
 signal etapa_mudou(etapa_atual: int, total_de_etapas: int)
 signal invocacao_solicitada(dados: DadosInimigo, posicao: Vector2)
+signal atingido(posicao_do_impacto: Vector2)  # um tiro acertou (para a faísca)
 
 const LIMITE_ESQUERDO_DA_PATRULHA := 60.0
 const LIMITE_DIREITO_DA_PATRULHA := 420.0
@@ -18,6 +19,10 @@ const LIMITE_DIREITO_DA_PATRULHA := 420.0
 @export var vida_maxima: int = 50
 @export var pontos: int = 300
 @export var altura_parada: float = 110.0
+## Arte do chefe, uma por etapa (a Colmeia tem 3; os outros, 1). Vazio = desenho geométrico.
+@export var texturas_por_etapa: Array[Texture2D] = []
+## Versão "acesa" da arte, uma por etapa, alternada com a normal durante o aviso de ataque.
+@export var texturas_de_aviso_por_etapa: Array[Texture2D] = []
 ## Frações da vida em que o chefe passa para a próxima etapa.
 ## Ex.: [0.66, 0.33] = 3 etapas (troca com 66% e com 33% da vida). Vazio = 1 etapa.
 @export var limites_das_etapas: Array[float] = []
@@ -33,6 +38,7 @@ func _ready() -> void:
 	add_to_group("chefe")
 	vida = vida_maxima
 	area_entered.connect(_ao_receber_area)
+	$Imagem.exibir(_textura_da_etapa(texturas_por_etapa), $Forma.shape.size, [$Desenho])
 	vida_mudou.emit(vida, vida_maxima)
 
 
@@ -43,6 +49,11 @@ func _process(delta: float) -> void:
 			entrando = false
 		return
 	_atualizar(delta)
+
+
+## Cor da barra de vida no HUD. Cada chefe devolve a sua cor.
+func cor_da_barra_de_vida() -> Color:
+	return Color.WHITE
 
 
 func total_de_etapas() -> int:
@@ -96,8 +107,30 @@ func _posicao_x_do_jogador_dentro_da_patrulha() -> float:
 	return clampf(jogador.global_position.x, LIMITE_ESQUERDO_DA_PATRULHA, LIMITE_DIREITO_DA_PATRULHA)
 
 
-func _piscar_aviso(desenho: Polygon2D, tempo_restante: float, cor_base: Color, cor_aviso: Color) -> void:
-	desenho.color = cor_aviso if int(tempo_restante * 14.0) % 2 == 0 else cor_base
+## Pisca o chefe antes de um ataque forte: alterna entre a arte normal e a de aviso
+## (ou, no plano B, entre a cor base e a cor de aviso do desenho).
+func _piscar_aviso(tempo_restante: float, cor_base: Color, cor_aviso: Color) -> void:
+	var aceso := int(tempo_restante * 14.0) % 2 == 0
+	if $Imagem.usa_textura():
+		var textura_de_aviso := _textura_da_etapa(texturas_de_aviso_por_etapa)
+		var deve_mostrar_aviso := aceso and textura_de_aviso != null
+		$Imagem.trocar_textura(textura_de_aviso if deve_mostrar_aviso else _textura_da_etapa(texturas_por_etapa))
+	else:
+		$Desenho.color = cor_aviso if aceso else cor_base
+
+
+## Volta ao visual normal da etapa atual (fim do aviso ou troca de etapa).
+func _restaurar_visual(cor_base: Color) -> void:
+	if $Imagem.usa_textura():
+		$Imagem.trocar_textura(_textura_da_etapa(texturas_por_etapa))
+	else:
+		$Desenho.color = cor_base
+
+
+func _textura_da_etapa(texturas: Array[Texture2D]) -> Texture2D:
+	if texturas.is_empty():
+		return null
+	return texturas[clampi(etapa_atual - 1, 0, texturas.size() - 1)]
 
 
 func _jogador() -> Node2D:
@@ -111,6 +144,7 @@ func _ao_receber_area(area: Area2D) -> void:
 	if entrando or vida <= 0:
 		return  # invulnerável durante a entrada
 	vida -= 1
+	atingido.emit(area.global_position)
 	vida_mudou.emit(vida, vida_maxima)
 	if vida <= 0:
 		derrotado.emit(pontos, global_position)

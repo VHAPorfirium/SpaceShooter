@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="DadosInimigo" format=3]
+
+[ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="1_ast01"]
+[ext_resource type="Texture2D" uid="uid://db6g4t30ev64e" path="res://assets/arte/06_cenarios/asteroide_03.svg" id="2_arte"]
+
+[resource]
+script = ExtResource("1_ast01")
+nome = "Asteroide grande"
+textura = ExtResource("2_arte")
+vida = 9
+velocidade = 50.0
+pontos = 20
+cor = Color(0.54509807, 0.4117647, 0.3137255, 1)
+forma = 3
+tamanho = Vector2(72, 72)
+velocidade_giro = 0.6
+metadata/_custom_type_script = "uid://ceelcslf8dq6m"

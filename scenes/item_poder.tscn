@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://45w5n6lhbmof"]
 
 [ext_resource type="Script" uid="uid://b36uspkooe4gl" path="res://script/item_poder.gd" id="1_22rh2"]
+[ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_d5qys"]
 radius = 11.0
@@ -11,6 +12,9 @@ collision_mask = 0
 script = ExtResource("1_22rh2")
 
 [node name="Desenho" type="Polygon2D" parent="." unique_id=1526644638]
+
+[node name="Imagem" type="Sprite2D" parent="." unique_id=523729283]
+script = ExtResource("90_imagem")
 
 [node name="Forma" type="CollisionShape2D" parent="." unique_id=223415595]
 shape = SubResource("CircleShape2D_d5qys")

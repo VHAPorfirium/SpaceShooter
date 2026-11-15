@@ -34,9 +34,13 @@ func _atualizar(delta: float) -> void:
 		if not _aviso_ja_emitido:
 			_aviso_ja_emitido = true
 			aviso_iniciado.emit()
-		_piscar_aviso($Desenho, _tempo_ate_o_ataque, COR_BASE, COR_AVISO)
+		_piscar_aviso(_tempo_ate_o_ataque, COR_BASE, COR_AVISO)
 	if _tempo_ate_o_ataque <= 0.0:
 		_tempo_ate_o_ataque = intervalo_ataque
 		_aviso_ja_emitido = false
-		$Desenho.color = COR_BASE
+		_restaurar_visual(COR_BASE)
 		_atirar_leque(5, 0.6, 36.0)
+
+
+func cor_da_barra_de_vida() -> Color:
+	return COR_BASE

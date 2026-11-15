@@ -12,6 +12,9 @@ const FORMAS := {
 	DadosInimigo.Forma.BLOCO: [
 		Vector2(-19, -14), Vector2(19, -14), Vector2(19, 12),
 		Vector2(8, 12), Vector2(0, 22), Vector2(-8, 12), Vector2(-19, 12)],
+	DadosInimigo.Forma.ROCHA: [
+		Vector2(-6, -22), Vector2(12, -19), Vector2(22, -6), Vector2(19, 10),
+		Vector2(8, 21), Vector2(-10, 20), Vector2(-21, 8), Vector2(-20, -10)],
 }
 
 @export var dados: DadosInimigo
@@ -45,6 +48,8 @@ func _process(delta: float) -> void:
 	position.y += dados.velocidade * delta
 	if dados.movimento == DadosInimigo.Movimento.ZIGZAG:
 		position.x = _x_inicial + sin(_tempo * dados.frequencia) * dados.amplitude
+	if dados.velocidade_giro != 0.0:
+		$Desenho.rotation += dados.velocidade_giro * delta
 
 	if dados.atira:
 		_tempo_tiro -= delta

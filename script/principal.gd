@@ -2,6 +2,13 @@ extends Node2D
 
 enum Estado { JOGANDO, TRANSICAO, FIM, VITORIA }
 
+const ATRASO_PARA_ACEITAR_REINICIO_SEGUNDOS := 0.7
+const DURACAO_DA_FRASE_INICIAL_SEGUNDOS := 3.0
+const FRASE_DA_VITORIA := "A Colmeia caiu.\nA Terra está a salvo."
+const COR_CONTORNO_DO_HUD := Color("#0a0818")
+const COR_EXPLOSAO_DO_CHEFE := Color("#ff9f45")
+const COR_EXPLOSAO_DO_JOGADOR := Color("#5ee7ff")
+
 @export var cena_tiro: PackedScene
 @export var cena_tiro_inimigo: PackedScene
 @export var cena_inimigo: PackedScene
@@ -16,6 +23,7 @@ var _chefe_ativo: bool = false
 var _pontos: int = 0
 var _recorde: int = 0
 var _nome_do_chefe_atual: String = ""
+var _aceita_reinicio: bool = false
 
 @onready var _jogador: Area2D = $Jogador
 @onready var _tiros: Node2D = $Tiros
@@ -31,6 +39,9 @@ var _nome_do_chefe_atual: String = ""
 @onready var _fase_label: Label = $FaseLabel
 @onready var _mensagem: Label = $Mensagem
 @onready var _barra_chefe: ProgressBar = $BarraChefe
+@onready var _fundo_estrelado: FundoEstrelado = $FundoEstrelado
+@onready var _efeitos: Node2D = $Efeitos
+@onready var _flash_de_dano: FlashDeDano = $FlashDeDano
 
 
 func _ready() -> void:
@@ -43,30 +54,67 @@ func _ready() -> void:
 	_gerenciador.roteiro_concluido.connect(_ao_ondas_esgotadas)
 	_tempo_transicao.timeout.connect(_ao_fim_transicao)
 
-	_mensagem.visible = false
-	_mensagem.position = Vector2(0, 250)
-	_mensagem.size = Vector2(480, 220)
-	_mensagem.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_mensagem.add_theme_font_size_override("font_size", 28)
-
-	_fase_label.position = Vector2(0, 10)
-	_fase_label.size = Vector2(480, 24)
-	_fase_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-
-	_barra_chefe.position = Vector2(90, 40)
-	_barra_chefe.size = Vector2(300, 12)
-	_barra_chefe.show_percentage = false
-	_barra_chefe.visible = false
-
+	_configurar_hud()
 	_recorde = Recorde.carregar()
 	_recorde_label.text = "Recorde %d" % _recorde
-	_poder_label.text = ""
+	_atualizar_placar()
 	_ao_vidas_mudarem(_jogador.vidas)
 
 	_fases.append(CatalogoFases.fase_1())
 	_fases.append(CatalogoFases.fase_2())
 	_fases.append(CatalogoFases.fase_3())
 	_iniciar_fase(0)
+	_mostrar_frase_inicial()
+
+
+## Organiza o HUD em faixas para nada ficar por cima de nada:
+## linha 1: Pontos (esquerda) e Vidas (direita); linha 2: Recorde;
+## linha 3: nome da fase/chefe no centro; linha 4: barra do chefe;
+## rodapé: poderes ativos.
+func _configurar_hud() -> void:
+	_posicionar_rotulo(_placar, Vector2(16, 8), Vector2(220, 24), HORIZONTAL_ALIGNMENT_LEFT, 18)
+	_posicionar_rotulo(_vidas_label, Vector2(244, 8), Vector2(220, 24), HORIZONTAL_ALIGNMENT_RIGHT, 18)
+	_posicionar_rotulo(_recorde_label, Vector2(16, 32), Vector2(220, 20), HORIZONTAL_ALIGNMENT_LEFT, 14)
+	_posicionar_rotulo(_fase_label, Vector2(0, 56), Vector2(480, 22), HORIZONTAL_ALIGNMENT_CENTER, 16)
+	_posicionar_rotulo(_poder_label, Vector2(16, 692), Vector2(448, 20), HORIZONTAL_ALIGNMENT_LEFT, 14)
+	_poder_label.text = ""
+
+	_barra_chefe.position = Vector2(90, 82)
+	_barra_chefe.size = Vector2(300, 10)
+	_barra_chefe.show_percentage = false
+	_barra_chefe.z_index = 60  # a barra fica visível mesmo com o chefe passando por baixo
+	_barra_chefe.visible = false
+
+	_posicionar_rotulo(_mensagem, Vector2(20, 230), Vector2(440, 260), HORIZONTAL_ALIGNMENT_CENTER, 24)
+	_mensagem.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_mensagem.visible = false
+
+	_flash_de_dano.position = Vector2.ZERO
+	_flash_de_dano.size = FundoEstrelado.TAMANHO_DA_TELA
+
+
+func _posicionar_rotulo(rotulo: Label, posicao: Vector2, tamanho: Vector2,
+		alinhamento: HorizontalAlignment, tamanho_da_fonte: int) -> void:
+	rotulo.position = posicao
+	rotulo.size = tamanho
+	rotulo.horizontal_alignment = alinhamento
+	rotulo.z_index = 60  # HUD acima de tudo, inclusive do piscar de dano
+	rotulo.add_theme_font_size_override("font_size", tamanho_da_fonte)
+	rotulo.add_theme_color_override("font_outline_color", COR_CONTORNO_DO_HUD)
+	rotulo.add_theme_constant_override("outline_size", 4)
+
+
+func _mostrar_frase_inicial() -> void:
+	var primeira_fase := _fases[0]
+	_mensagem.text = "%s\n\n%s" % [primeira_fase.nome, primeira_fase.frase_de_abertura]
+	_mensagem.visible = true
+	await get_tree().create_timer(DURACAO_DA_FRASE_INICIAL_SEGUNDOS).timeout
+	if _estado == Estado.JOGANDO and _fase_atual == 0:
+		_mensagem.visible = false
+
+
+func _atualizar_placar() -> void:
+	_placar.text = "Pontos %d" % _pontos
 
 
 func _process(_delta: float) -> void:
@@ -83,8 +131,8 @@ func _process(_delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	var terminou := _estado == Estado.FIM or _estado == Estado.VITORIA
-	if not terminou:
-		return
+	if not terminou or not _aceita_reinicio:
+		return  # espera um instante para o tiro (Espaço) não reiniciar sem querer
 	if event.is_action_pressed("ui_accept"):
 		get_tree().reload_current_scene()
 	else:
@@ -100,6 +148,7 @@ func _iniciar_fase(indice: int) -> void:
 	_estado = Estado.JOGANDO
 	var fase := _fases[indice]
 	RenderingServer.set_default_clear_color(fase.cor_fundo)
+	_fundo_estrelado.definir_cor_das_estrelas(fase.cor_estrelas)
 	_fase_label.text = fase.nome
 	_barra_chefe.visible = false
 	_mensagem.visible = false
@@ -129,13 +178,15 @@ func _concluir_fase() -> void:
 		tiro.queue_free()
 	if _fase_atual + 1 < _fases.size():
 		_estado = Estado.TRANSICAO
-		_mensagem.text = "%s\nconcluída!" % _fases[_fase_atual].nome
+		var proxima_fase := _fases[_fase_atual + 1]
+		_mensagem.text = "%s concluída!\n\n%s\n\n%s" % [
+			_fases[_fase_atual].nome, proxima_fase.frase_de_abertura, proxima_fase.nome]
 		_mensagem.visible = true
 		_tempo_transicao.start()
 		GerenciadorAudio.tocar_encerramento(GerenciadorAudio.Efeito.FASE_CONCLUIDA)
 	else:
 		_estado = Estado.VITORIA
-		_finalizar_partida("VITÓRIA!", GerenciadorAudio.Efeito.VITORIA)
+		_finalizar_partida("VITÓRIA!\n%s" % FRASE_DA_VITORIA, GerenciadorAudio.Efeito.VITORIA)
 
 
 func _ao_fim_transicao() -> void:
@@ -151,7 +202,7 @@ func _ao_spawn_solicitado(dados: DadosInimigo, posicao: Vector2) -> void:
 	var inimigo: Inimigo = cena_inimigo.instantiate()
 	inimigo.dados = dados
 	inimigo.position = posicao
-	inimigo.morreu.connect(_ao_inimigo_morrer)
+	inimigo.morreu.connect(_ao_inimigo_morrer.bind(dados.cor))
 	inimigo.disparou.connect(_ao_inimigo_disparar)
 	_inimigos.add_child(inimigo)
 
@@ -188,18 +239,20 @@ func _ao_vida_chefe_mudou(vida: int, vida_maxima: int) -> void:
 		GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.ACERTO_CHEFE)
 
 
-func _ao_chefe_derrotado(pontos: int, _posicao: Vector2) -> void:
+func _ao_chefe_derrotado(pontos: int, posicao: Vector2) -> void:
 	_pontos += pontos
-	_placar.text = "Pontos %d" % _pontos
+	_atualizar_placar()
+	_criar_explosao(posicao, COR_EXPLOSAO_DO_CHEFE, 90.0, 1.0)
 	_chefe_ativo = false
 	_barra_chefe.visible = false
 	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.EXPLOSAO_CHEFE)
 	_concluir_fase()
 
 
-func _ao_inimigo_morrer(pontos: int, posicao: Vector2) -> void:
+func _ao_inimigo_morrer(pontos: int, posicao: Vector2, cor_do_inimigo: Color) -> void:
 	_pontos += pontos
-	_placar.text = "Pontos %d" % _pontos
+	_atualizar_placar()
+	_criar_explosao.call_deferred(posicao, cor_do_inimigo, 26.0, 0.45)
 	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.EXPLOSAO_INIMIGO)
 	# Adiado: criar uma Area2D no meio de um callback de física causa erro
 	_tentar_dropar.call_deferred(posicao)
@@ -221,8 +274,13 @@ func _ao_vidas_mudarem(vidas: int) -> void:
 	_vidas_label.text = "Vidas %d" % vidas
 
 
+func _criar_explosao(posicao: Vector2, cor: Color, raio: float, duracao: float) -> void:
+	_efeitos.add_child(Explosao.criar(posicao, cor, raio, duracao))
+
+
 func _ao_jogador_perder_vida(vidas: int) -> void:
 	_ao_vidas_mudarem(vidas)
+	_flash_de_dano.piscar()
 	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.DANO_JOGADOR)
 
 
@@ -253,6 +311,7 @@ func _ao_jogador_destruido() -> void:
 		return  # um Batedor que sobrou não pode transformar a vitória em derrota
 	_estado = Estado.FIM
 	_tempo_transicao.stop()
+	_criar_explosao.call_deferred(_jogador.global_position, COR_EXPLOSAO_DO_JOGADOR, 60.0, 0.8)
 	_finalizar_partida("FIM DE JOGO", GerenciadorAudio.Efeito.FIM_DE_JOGO)
 
 
@@ -271,6 +330,9 @@ func _finalizar_partida(titulo: String, efeito_encerramento: GerenciadorAudio.Ef
 	var texto := "%s\nPontos %d\nRecorde %d" % [titulo, _pontos, _recorde]
 	if novo_recorde:
 		texto += "\nNOVO RECORDE!"
-	texto += "\nEnter: jogar de novo\nM: menu"
+	texto += "\n\nEnter: jogar de novo\nM: menu"
 	_mensagem.text = texto
 	_mensagem.visible = true
+	_aceita_reinicio = false
+	await get_tree().create_timer(ATRASO_PARA_ACEITAR_REINICIO_SEGUNDOS).timeout
+	_aceita_reinicio = true

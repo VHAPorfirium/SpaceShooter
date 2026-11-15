@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dy5x1hd8f4gsu"]
 
 [ext_resource type="Script" uid="uid://dumfg0ejc3tj6" path="res://script/menu.gd" id="1_yqeox"]
+[ext_resource type="Script" uid="uid://dc718kuiyklj0" path="res://script/fundo_estrelado.gd" id="2_fundo"]
 
 [node name="Menu" type="Control" unique_id=380478875]
 layout_mode = 3
@@ -8,6 +9,9 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_yqeox")
+
+[node name="FundoEstrelado" type="Node2D" parent="." unique_id=356468133]
+script = ExtResource("2_fundo")
 
 [node name="Titulo1" type="Label" parent="." unique_id=493660128]
 layout_mode = 0

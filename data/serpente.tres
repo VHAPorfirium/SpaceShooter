@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_hw7is")
+nome = "Serpente"
 velocidade = 90.0
 pontos = 20
 cor = Color(0.78039217, 0.49019608, 1, 1)

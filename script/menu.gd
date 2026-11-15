@@ -1,6 +1,7 @@
 extends Control
 
 const COR_FUNDO := Color("#14102b")
+const MUSICA_MENU := preload("res://assets/audio/musicas/menu.wav")
 
 @onready var _titulo_1: Label = $Titulo1
 @onready var _titulo_2: Label = $Titulo2
@@ -11,6 +12,7 @@ const COR_FUNDO := Color("#14102b")
 
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(COR_FUNDO)
+	GerenciadorAudio.tocar_musica(MUSICA_MENU)
 	_configurar(_titulo_1, "SPACE", 170.0, 64, Color("#5ee7ff"))
 	_configurar(_titulo_2, "SHOOTER", 245.0, 64, Color("#ff5d73"))
 	_configurar(_instrucoes, "Setas ou WASD: mover\nEspaço: atirar\nP ou Esc: pausar", 390.0, 20, Color("#f4f1ff"))
@@ -20,6 +22,7 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
+		GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.CONFIRMAR)
 		get_tree().change_scene_to_file("res://scenes/principal.tscn")
 	elif event.is_action_pressed("ui_cancel"):
 		get_tree().quit()

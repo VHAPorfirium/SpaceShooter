@@ -27,9 +27,11 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif get_tree().paused and tecla.keycode == KEY_M:
 		get_tree().paused = false
+		GerenciadorAudio.definir_jogo_pausado(false)
 		get_tree().change_scene_to_file("res://scenes/menu.tscn")
 
 
 func _alternar() -> void:
 	get_tree().paused = not get_tree().paused
 	_texto.visible = get_tree().paused
+	GerenciadorAudio.definir_jogo_pausado(get_tree().paused)

@@ -9,6 +9,7 @@ const COR_AVISO := Color("#ffffff")
 
 var _direcao: float = 1.0
 var _tempo_ataque: float = 0.0
+var _aviso_ja_emitido: bool = false
 
 
 func _ready() -> void:
@@ -36,9 +37,13 @@ func _atualizar(delta: float) -> void:
 	# Aviso visual e ataque em leque
 	_tempo_ataque -= delta
 	if _tempo_ataque <= tempo_aviso:
+		if not _aviso_ja_emitido:
+			_aviso_ja_emitido = true
+			aviso_iniciado.emit()
 		$Desenho.color = COR_AVISO if int(_tempo_ataque * 14.0) % 2 == 0 else COR_BASE
 	if _tempo_ataque <= 0.0:
 		_tempo_ataque = intervalo_ataque
+		_aviso_ja_emitido = false
 		$Desenho.color = COR_BASE
 		_atirar_leque()
 

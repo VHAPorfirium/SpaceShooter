@@ -35,7 +35,8 @@ var _recorde: int = 0
 
 func _ready() -> void:
 	_jogador.disparou.connect(_ao_jogador_disparar)
-	_jogador.vidas_mudaram.connect(_ao_vidas_mudarem)
+	_jogador.vidas_mudaram.connect(_ao_jogador_perder_vida)
+	_jogador.poder_coletado.connect(_ao_jogador_coletar_poder)
 	_jogador.poderes_mudaram.connect(_ao_poderes_mudarem)
 	_jogador.destruida.connect(_ao_jogador_destruido)
 	_gerenciador.spawn_solicitado.connect(_ao_spawn_solicitado)
@@ -102,6 +103,7 @@ func _iniciar_fase(indice: int) -> void:
 	_barra_chefe.visible = false
 	_mensagem.visible = false
 	_gerenciador.iniciar(fase)
+	GerenciadorAudio.tocar_musica(fase.musica)
 
 
 func _iniciar_chefe(fase: DadosFase) -> void:
@@ -111,8 +113,11 @@ func _iniciar_chefe(fase: DadosFase) -> void:
 	chefe.vida_mudou.connect(_ao_vida_chefe_mudou)
 	chefe.derrotado.connect(_ao_chefe_derrotado)
 	chefe.disparou.connect(_ao_chefe_disparar)
+	chefe.aviso_iniciado.connect(_ao_chefe_iniciar_aviso)
 	_inimigos.add_child(chefe)
 	_fase_label.text = "Chefe: %s" % chefe.nome
+	if fase.musica_chefe != null:
+		GerenciadorAudio.tocar_musica(fase.musica_chefe)
 
 
 func _concluir_fase() -> void:
@@ -123,9 +128,10 @@ func _concluir_fase() -> void:
 		_mensagem.text = "%s\nconcluída!" % _fases[_fase_atual].nome
 		_mensagem.visible = true
 		_tempo_transicao.start()
+		GerenciadorAudio.tocar_encerramento(GerenciadorAudio.Efeito.FASE_CONCLUIDA)
 	else:
 		_estado = Estado.VITORIA
-		_finalizar_partida("VITÓRIA!")
+		_finalizar_partida("VITÓRIA!", GerenciadorAudio.Efeito.VITORIA)
 
 
 func _ao_fim_transicao() -> void:
@@ -151,12 +157,14 @@ func _ao_jogador_disparar(posicao: Vector2, direcao: Vector2) -> void:
 	tiro.position = posicao
 	tiro.direcao = direcao
 	_tiros.add_child(tiro)
+	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.TIRO_JOGADOR)
 
 
 func _ao_inimigo_disparar(posicao: Vector2) -> void:
 	var tiro: TiroInimigo = cena_tiro_inimigo.instantiate()
 	tiro.position = posicao
 	_tiros_inimigos.add_child(tiro)
+	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.TIRO_INIMIGO)
 
 
 func _ao_chefe_disparar(posicao: Vector2, direcao: Vector2) -> void:
@@ -164,12 +172,16 @@ func _ao_chefe_disparar(posicao: Vector2, direcao: Vector2) -> void:
 	tiro.position = posicao
 	tiro.direcao = direcao
 	_tiros_inimigos.add_child(tiro)
+	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.TIRO_INIMIGO)
 
 
 func _ao_vida_chefe_mudou(vida: int, vida_maxima: int) -> void:
 	_barra_chefe.max_value = vida_maxima
 	_barra_chefe.value = vida
 	_barra_chefe.visible = true
+	var chefe_foi_atingido := vida < vida_maxima
+	if chefe_foi_atingido:
+		GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.ACERTO_CHEFE)
 
 
 func _ao_chefe_derrotado(pontos: int, _posicao: Vector2) -> void:
@@ -177,12 +189,14 @@ func _ao_chefe_derrotado(pontos: int, _posicao: Vector2) -> void:
 	_placar.text = "Pontos %d" % _pontos
 	_chefe_ativo = false
 	_barra_chefe.visible = false
+	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.EXPLOSAO_CHEFE)
 	_concluir_fase()
 
 
 func _ao_inimigo_morrer(pontos: int, posicao: Vector2) -> void:
 	_pontos += pontos
 	_placar.text = "Pontos %d" % _pontos
+	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.EXPLOSAO_INIMIGO)
 	# Adiado: criar uma Area2D no meio de um callback de física causa erro
 	_tentar_dropar.call_deferred(posicao)
 
@@ -202,6 +216,19 @@ func _ao_vidas_mudarem(vidas: int) -> void:
 	_vidas_label.text = "Vidas %d" % vidas
 
 
+func _ao_jogador_perder_vida(vidas: int) -> void:
+	_ao_vidas_mudarem(vidas)
+	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.DANO_JOGADOR)
+
+
+func _ao_jogador_coletar_poder(_poder: DadosPoder) -> void:
+	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.PODER_COLETADO)
+
+
+func _ao_chefe_iniciar_aviso() -> void:
+	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.AVISO_CHEFE)
+
+
 func _ao_poderes_mudarem(texto: String) -> void:
 	_poder_label.text = texto
 
@@ -209,11 +236,12 @@ func _ao_poderes_mudarem(texto: String) -> void:
 func _ao_jogador_destruido() -> void:
 	_estado = Estado.FIM
 	_tempo_transicao.stop()
-	_finalizar_partida("FIM DE JOGO")
+	_finalizar_partida("FIM DE JOGO", GerenciadorAudio.Efeito.FIM_DE_JOGO)
 
 
-func _finalizar_partida(titulo: String) -> void:
+func _finalizar_partida(titulo: String, efeito_encerramento: GerenciadorAudio.Efeito) -> void:
 	$Pausa.habilitada = false
+	GerenciadorAudio.tocar_encerramento(efeito_encerramento)
 	_gerenciador.parar()
 	_barra_chefe.visible = false
 

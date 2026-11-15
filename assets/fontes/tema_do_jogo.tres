@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" uid="uid://cxowwydcu8afo" path="res://assets/fontes/Orbitron.ttf" id="1_orbitron"]
+
+[resource]
+default_font = ExtResource("1_orbitron")
+default_font_size = 16

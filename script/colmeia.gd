@@ -199,3 +199,7 @@ func _atualizar_troca_de_etapa(delta: float) -> void:
 
 func _cor_da_etapa() -> Color:
 	return COR_POR_ETAPA.get(etapa_atual, COR_POR_ETAPA[3])
+
+
+func cor_da_barra_de_vida() -> Color:
+	return _cor_da_etapa()

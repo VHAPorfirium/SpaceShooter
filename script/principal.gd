@@ -4,7 +4,8 @@ enum Estado { JOGANDO, TRANSICAO, FIM, VITORIA }
 
 const ATRASO_PARA_ACEITAR_REINICIO_SEGUNDOS := 0.7
 const DURACAO_DA_FRASE_INICIAL_SEGUNDOS := 3.0
-const FRASE_DA_VITORIA := "A Colmeia caiu.\nA Terra está a salvo."
+const FRASE_DA_VITORIA := "A Colmeia caiu. A Terra está a salvo."
+const FRASE_DO_FIM_DE_JOGO := "A frota invasora segue rumo à Terra."
 const COR_CONTORNO_DO_HUD := Color("#0a0818")
 const COR_EXPLOSAO_DO_CHEFE := Color("#ff9f45")
 const COR_EXPLOSAO_DO_JOGADOR := Color("#5ee7ff")
@@ -32,6 +33,7 @@ var _pontos: int = 0
 var _recorde: int = 0
 var _nome_do_chefe_atual: String = ""
 var _aceita_reinicio: bool = false
+var _chefe_atual: ChefeBase
 
 @onready var _jogador: Area2D = $Jogador
 @onready var _tiros: Node2D = $Tiros
@@ -45,8 +47,9 @@ var _aceita_reinicio: bool = false
 @onready var _vidas_label: Label = $Vidas
 @onready var _poder_label: Label = $PoderLabel
 @onready var _fase_label: Label = $FaseLabel
-@onready var _mensagem: Label = $Mensagem
-@onready var _barra_chefe: ProgressBar = $BarraChefe
+@onready var _painel_de_mensagem: PainelDeMensagem = $PainelDeMensagem
+@onready var _barra_chefe: TextureProgressBar = $BarraChefe
+@onready var _indicador_de_vidas: IndicadorDeVidas = $IndicadorDeVidas
 @onready var _fundo_estrelado: FundoEstrelado = $FundoEstrelado
 @onready var _cenario: CenarioRolante = $Cenario
 @onready var _efeitos: Node2D = $Efeitos
@@ -90,13 +93,12 @@ func _configurar_hud() -> void:
 
 	_barra_chefe.position = Vector2(90, 82)
 	_barra_chefe.size = Vector2(300, 10)
-	_barra_chefe.show_percentage = false
+	_barra_chefe.nine_patch_stretch = true  # estica a arte da barra para o tamanho acima
 	_barra_chefe.z_index = 60  # a barra fica visível mesmo com o chefe passando por baixo
 	_barra_chefe.visible = false
 
-	_posicionar_rotulo(_mensagem, Vector2(20, 230), Vector2(440, 260), HORIZONTAL_ALIGNMENT_CENTER, 24)
-	_mensagem.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_mensagem.visible = false
+	_indicador_de_vidas.position = Vector2(0, 10)
+	_vidas_label.visible = not _indicador_de_vidas.tem_icone()  # plano B: "Vidas 3" em texto
 
 	_flash_de_dano.position = Vector2.ZERO
 	_flash_de_dano.size = FundoEstrelado.TAMANHO_DA_TELA
@@ -115,11 +117,10 @@ func _posicionar_rotulo(rotulo: Label, posicao: Vector2, tamanho: Vector2,
 
 func _mostrar_frase_inicial() -> void:
 	var primeira_fase := _fases[0]
-	_mensagem.text = "%s\n\n%s" % [primeira_fase.nome, primeira_fase.frase_de_abertura]
-	_mensagem.visible = true
+	_painel_de_mensagem.mostrar_abertura_de_fase(primeira_fase.nome, primeira_fase.frase_de_abertura)
 	await get_tree().create_timer(DURACAO_DA_FRASE_INICIAL_SEGUNDOS).timeout
 	if _estado == Estado.JOGANDO and _fase_atual == 0:
-		_mensagem.visible = false
+		_painel_de_mensagem.esconder()
 
 
 func _atualizar_placar() -> void:
@@ -162,7 +163,7 @@ func _iniciar_fase(indice: int) -> void:
 	_fundo_estrelado.visible = not _cenario.tem_camadas()  # plano B: estrelas em código
 	_fase_label.text = fase.nome
 	_barra_chefe.visible = false
-	_mensagem.visible = false
+	_painel_de_mensagem.esconder()
 	_gerenciador.iniciar(fase)
 	GerenciadorAudio.tocar_musica(fase.musica)
 
@@ -178,6 +179,7 @@ func _iniciar_chefe(fase: DadosFase) -> void:
 	chefe.etapa_mudou.connect(_ao_chefe_mudar_etapa)
 	chefe.invocacao_solicitada.connect(_ao_spawn_solicitado)
 	chefe.atingido.connect(_ao_chefe_ser_atingido)
+	_chefe_atual = chefe
 	_inimigos.add_child(chefe)
 	_fase_label.text = _texto_do_chefe(chefe.nome, chefe.etapa_atual, chefe.total_de_etapas())
 	_nome_do_chefe_atual = chefe.nome
@@ -191,14 +193,12 @@ func _concluir_fase() -> void:
 	if _fase_atual + 1 < _fases.size():
 		_estado = Estado.TRANSICAO
 		var proxima_fase := _fases[_fase_atual + 1]
-		_mensagem.text = "%s concluída!\n\n%s\n\n%s" % [
-			_fases[_fase_atual].nome, proxima_fase.frase_de_abertura, proxima_fase.nome]
-		_mensagem.visible = true
+		_painel_de_mensagem.mostrar_transicao(_fases[_fase_atual].nome, proxima_fase.frase_de_abertura, proxima_fase.nome)
 		_tempo_transicao.start()
 		GerenciadorAudio.tocar_encerramento(GerenciadorAudio.Efeito.FASE_CONCLUIDA)
 	else:
 		_estado = Estado.VITORIA
-		_finalizar_partida("VITÓRIA!\n%s" % FRASE_DA_VITORIA, GerenciadorAudio.Efeito.VITORIA)
+		_finalizar_partida(true)
 
 
 func _ao_fim_transicao() -> void:
@@ -246,6 +246,7 @@ func _ao_vida_chefe_mudou(vida: int, vida_maxima: int) -> void:
 	_barra_chefe.max_value = vida_maxima
 	_barra_chefe.value = vida
 	_barra_chefe.visible = true
+	_pintar_barra_do_chefe()
 	var chefe_foi_atingido := vida < vida_maxima
 	if chefe_foi_atingido:
 		GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.ACERTO_CHEFE)
@@ -284,6 +285,7 @@ func _tentar_dropar(posicao: Vector2) -> void:
 
 func _ao_vidas_mudarem(vidas: int) -> void:
 	_vidas_label.text = "Vidas %d" % vidas
+	_indicador_de_vidas.definir_vidas(vidas)
 
 
 ## Explosão animada com a arte; sem a arte, a explosão desenhada em código (plano B).
@@ -318,6 +320,13 @@ func _ao_jogador_coletar_poder(_poder: DadosPoder) -> void:
 
 func _ao_chefe_mudar_etapa(etapa_atual: int, total_de_etapas: int) -> void:
 	_fase_label.text = _texto_do_chefe(_nome_do_chefe_atual, etapa_atual, total_de_etapas)
+	_pintar_barra_do_chefe()
+
+
+## A barra de vida usa a cor do chefe (e da etapa, na Colmeia).
+func _pintar_barra_do_chefe() -> void:
+	if is_instance_valid(_chefe_atual):
+		_barra_chefe.tint_progress = _chefe_atual.cor_da_barra_de_vida()
 
 
 func _texto_do_chefe(nome_do_chefe: String, etapa_atual: int, total_de_etapas: int) -> String:
@@ -340,12 +349,12 @@ func _ao_jogador_destruido() -> void:
 	_estado = Estado.FIM
 	_tempo_transicao.stop()
 	_criar_explosao.call_deferred(_jogador.global_position, COR_EXPLOSAO_DO_JOGADOR, 60.0, 0.8)
-	_finalizar_partida("FIM DE JOGO", GerenciadorAudio.Efeito.FIM_DE_JOGO)
+	_finalizar_partida(false)
 
 
-func _finalizar_partida(titulo: String, efeito_encerramento: GerenciadorAudio.Efeito) -> void:
+func _finalizar_partida(eh_vitoria: bool) -> void:
 	$Pausa.habilitada = false
-	GerenciadorAudio.tocar_encerramento(efeito_encerramento)
+	GerenciadorAudio.tocar_encerramento(GerenciadorAudio.Efeito.VITORIA if eh_vitoria else GerenciadorAudio.Efeito.FIM_DE_JOGO)
 	_gerenciador.parar()
 	_barra_chefe.visible = false
 
@@ -355,12 +364,8 @@ func _finalizar_partida(titulo: String, efeito_encerramento: GerenciadorAudio.Ef
 		Recorde.salvar(_recorde)
 		_recorde_label.text = "Recorde %d" % _recorde
 
-	var texto := "%s\nPontos %d\nRecorde %d" % [titulo, _pontos, _recorde]
-	if novo_recorde:
-		texto += "\nNOVO RECORDE!"
-	texto += "\n\nEnter: jogar de novo\nM: menu"
-	_mensagem.text = texto
-	_mensagem.visible = true
+	var frase := FRASE_DA_VITORIA if eh_vitoria else FRASE_DO_FIM_DE_JOGO
+	_painel_de_mensagem.mostrar_resultado(eh_vitoria, frase, _pontos, _recorde, novo_recorde)
 	_aceita_reinicio = false
 	await get_tree().create_timer(ATRASO_PARA_ACEITAR_REINICIO_SEGUNDOS).timeout
 	_aceita_reinicio = true

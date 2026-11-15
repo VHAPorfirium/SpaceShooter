@@ -69,3 +69,7 @@ func _iniciar_aviso() -> void:
 	_tempo = tempo_aviso
 	aviso_iniciado.emit()
 	_alvo_x = _posicao_x_do_jogador_dentro_da_patrulha()
+
+
+func cor_da_barra_de_vida() -> Color:
+	return COR_BASE

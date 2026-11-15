@@ -15,6 +15,14 @@
 [ext_resource type="SpriteFrames" path="res://data/efeitos/explosao_grande.tres" id="17_explosao_grande"]
 [ext_resource type="SpriteFrames" path="res://data/efeitos/acerto.tres" id="18_acerto"]
 [ext_resource type="Texture2D" uid="uid://dpydffhce6m00" path="res://assets/arte/05_efeitos/flash_dano.svg" id="19_flash_arte"]
+[ext_resource type="Script" uid="uid://j7u5x060q0t5" path="res://script/painel_de_mensagem.gd" id="21_painel"]
+[ext_resource type="Script" uid="uid://ddpfsic3supnd" path="res://script/indicador_de_vidas.gd" id="22_vidas"]
+[ext_resource type="Texture2D" uid="uid://bvjrtuyeok4nj" path="res://assets/arte/07_interface/tela_transicao.svg" id="23_moldura_transicao"]
+[ext_resource type="Texture2D" uid="uid://8h4edg8ypws7" path="res://assets/arte/07_interface/tela_vitoria.svg" id="24_moldura_vitoria"]
+[ext_resource type="Texture2D" uid="uid://dg4a51d316qsg" path="res://assets/arte/07_interface/tela_fim_de_jogo.svg" id="25_moldura_fim"]
+[ext_resource type="Texture2D" uid="uid://blo3dnle002fu" path="res://assets/arte/07_interface/hud_vida.svg" id="26_icone_vida"]
+[ext_resource type="Texture2D" uid="uid://6t7yyjc60q2k" path="res://assets/arte/07_interface/hud_barra_chefe_fundo.svg" id="27_barra_fundo"]
+[ext_resource type="Texture2D" uid="uid://cxanusx85u2jp" path="res://assets/arte/07_interface/hud_barra_chefe_preenchimento.svg" id="28_barra_preenchimento"]
 
 [node name="Principal" type="Node2D" unique_id=1697945304]
 script = ExtResource("1_6f3be")
@@ -53,9 +61,16 @@ offset_top = 10.0
 offset_right = 400.0
 offset_bottom = 33.0
 
-[node name="Mensagem" type="Label" parent="." unique_id=144367220]
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="PainelDeMensagem" type="Control" parent="." unique_id=144367220]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 480.0
+offset_bottom = 720.0
+mouse_filter = 2
+script = ExtResource("21_painel")
+moldura_de_transicao = ExtResource("23_moldura_transicao")
+moldura_de_vitoria = ExtResource("24_moldura_vitoria")
+moldura_de_fim_de_jogo = ExtResource("25_moldura_fim")
 
 [node name="TirosInimigos" type="Node2D" parent="." unique_id=2121847991]
 
@@ -93,9 +108,15 @@ script = ExtResource("13_fj78b")
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="BarraChefe" type="ProgressBar" parent="." unique_id=537961307]
-offset_right = 4.0
-offset_bottom = 27.0
+[node name="BarraChefe" type="TextureProgressBar" parent="." unique_id=537961307]
+offset_right = 300.0
+offset_bottom = 12.0
+texture_under = ExtResource("27_barra_fundo")
+texture_progress = ExtResource("28_barra_preenchimento")
+
+[node name="IndicadorDeVidas" type="Node2D" parent="." unique_id=1734420917]
+script = ExtResource("22_vidas")
+icone = ExtResource("26_icone_vida")
 
 [node name="FlashDeDano" type="ColorRect" parent="." unique_id=686998824]
 script = ExtResource("15_flash")

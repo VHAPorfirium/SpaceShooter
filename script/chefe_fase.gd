@@ -51,6 +51,11 @@ func _process(delta: float) -> void:
 	_atualizar(delta)
 
 
+## Cor da barra de vida no HUD. Cada chefe devolve a sua cor.
+func cor_da_barra_de_vida() -> Color:
+	return Color.WHITE
+
+
 func total_de_etapas() -> int:
 	return limites_das_etapas.size() + 1
 

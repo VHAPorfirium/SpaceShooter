@@ -64,6 +64,10 @@ Pausa={
 ]
 }
 
+[gui]
+
+theme/custom="res://assets/fontes/tema_do_jogo.tres"
+
 [layer_names]
 
 2d_physics/layer_1="Jogador"

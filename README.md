@@ -379,14 +379,14 @@ O documento de design (GDD) com escopo, cronograma, riscos e orçamento acompanh
 
 | Integrante | Papel |
 |---|---|
-| Victor Hugo Aguiar Porfiro | Gerente do projeto |
+| Guilherme Bastos Borges | Gerente do projeto |
 | Matteo Souza Caetano | Desenvolvimento |
-| Kevin Oliveira Matos | Equipe |
-| Pedro Henrique Talalayv Gomes | Equipe |
-| Guilherme Bastos Borges | Equipe |
-| Eduardo Martins Ferreira | Equipe |
+| Kevin Oliveira Matos | Design |
+| Pedro Henrique Talalayv Gomes | QA |
+| Victor Hugo Aguiar Porfiro | Desenvolvimento |
+| Eduardo Martins Ferreira | QA |
 
-- **Arte:** criada para o projeto com o Claude Design.
+- **Arte:** criada para o projeto pelo Kevin.
 - **Áudio:** sintetizado pelo script do projeto.
 - **Fontes:** Orbitron e Chakra Petch, licença SIL Open Font License 1.1.
 - **Motor:** Godot Engine 4.7.2, licença MIT.

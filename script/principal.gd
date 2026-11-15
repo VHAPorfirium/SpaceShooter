@@ -8,12 +8,20 @@ const FRASE_DA_VITORIA := "A Colmeia caiu.\nA Terra está a salvo."
 const COR_CONTORNO_DO_HUD := Color("#0a0818")
 const COR_EXPLOSAO_DO_CHEFE := Color("#ff9f45")
 const COR_EXPLOSAO_DO_JOGADOR := Color("#5ee7ff")
+const RAIO_A_PARTIR_DO_QUAL_A_EXPLOSAO_E_GRANDE := 60.0
+const TAMANHO_DA_FAISCA_DE_ACERTO := Vector2(20, 20)
+const DURACAO_DA_FAISCA_DE_ACERTO := 0.15
 
 @export var cena_tiro: PackedScene
 @export var cena_tiro_inimigo: PackedScene
 @export var cena_inimigo: PackedScene
 @export var cena_item: PackedScene
 @export var chance_drop: float = 0.12
+@export_group("Efeitos animados (vazio = efeito desenhado em código)")
+@export var quadros_explosao_pequena: SpriteFrames
+@export var quadros_explosao_grande: SpriteFrames
+@export var quadros_acerto: SpriteFrames
+@export_group("")
 
 var _fases: Array[DadosFase] = []
 var _fase_atual: int = 0
@@ -166,6 +174,7 @@ func _iniciar_chefe(fase: DadosFase) -> void:
 	chefe.aviso_iniciado.connect(_ao_chefe_iniciar_aviso)
 	chefe.etapa_mudou.connect(_ao_chefe_mudar_etapa)
 	chefe.invocacao_solicitada.connect(_ao_spawn_solicitado)
+	chefe.atingido.connect(_ao_chefe_ser_atingido)
 	_inimigos.add_child(chefe)
 	_fase_label.text = _texto_do_chefe(chefe.nome, chefe.etapa_atual, chefe.total_de_etapas())
 	_nome_do_chefe_atual = chefe.nome
@@ -274,8 +283,24 @@ func _ao_vidas_mudarem(vidas: int) -> void:
 	_vidas_label.text = "Vidas %d" % vidas
 
 
+## Explosão animada com a arte; sem a arte, a explosão desenhada em código (plano B).
 func _criar_explosao(posicao: Vector2, cor: Color, raio: float, duracao: float) -> void:
-	_efeitos.add_child(Explosao.criar(posicao, cor, raio, duracao))
+	var explosao_e_grande := raio >= RAIO_A_PARTIR_DO_QUAL_A_EXPLOSAO_E_GRANDE
+	var quadros := quadros_explosao_grande if explosao_e_grande else quadros_explosao_pequena
+	if quadros == null:
+		_efeitos.add_child(Explosao.criar(posicao, cor, raio, duracao))
+		return
+	_efeitos.add_child(EfeitoAnimado.criar(posicao, quadros, Vector2.ONE * raio * 2.0, duracao))
+
+
+func _ao_chefe_ser_atingido(posicao_do_impacto: Vector2) -> void:
+	if quadros_acerto == null:
+		return
+	_criar_faisca_de_acerto.call_deferred(posicao_do_impacto)
+
+
+func _criar_faisca_de_acerto(posicao: Vector2) -> void:
+	_efeitos.add_child(EfeitoAnimado.criar(posicao, quadros_acerto, TAMANHO_DA_FAISCA_DE_ACERTO, DURACAO_DA_FAISCA_DE_ACERTO))
 
 
 func _ao_jogador_perder_vida(vidas: int) -> void:

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ckf8gatult4t6" path="res://script/tiro.gd" id="1_l1twf"]
 [ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
+[ext_resource type="Texture2D" uid="uid://c0ecmnbrs7fwk" path="res://assets/arte/03_tiros_e_poderes/tiro_jogador.svg" id="91_arte"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
 size = Vector2(5, 14)
@@ -10,6 +11,7 @@ size = Vector2(5, 14)
 collision_layer = 2
 collision_mask = 4
 script = ExtResource("1_l1twf")
+textura = ExtResource("91_arte")
 
 [node name="Forma" type="CollisionShape2D" parent="." unique_id=155402709]
 shape = SubResource("RectangleShape2D_hjp0y")

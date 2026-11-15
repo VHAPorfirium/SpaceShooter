@@ -10,6 +10,10 @@
 [ext_resource type="Script" uid="uid://bfup4d8q4t3ga" path="res://script/pausa.gd" id="13_fj78b"]
 [ext_resource type="Script" uid="uid://dc718kuiyklj0" path="res://script/fundo_estrelado.gd" id="14_fundo"]
 [ext_resource type="Script" uid="uid://d1coybwjgnngo" path="res://script/flash_de_dano.gd" id="15_flash"]
+[ext_resource type="SpriteFrames" path="res://data/efeitos/explosao_pequena.tres" id="16_explosao_pequena"]
+[ext_resource type="SpriteFrames" path="res://data/efeitos/explosao_grande.tres" id="17_explosao_grande"]
+[ext_resource type="SpriteFrames" path="res://data/efeitos/acerto.tres" id="18_acerto"]
+[ext_resource type="Texture2D" uid="uid://dpydffhce6m00" path="res://assets/arte/05_efeitos/flash_dano.svg" id="19_flash_arte"]
 
 [node name="Principal" type="Node2D" unique_id=1697945304]
 script = ExtResource("1_6f3be")
@@ -18,6 +22,9 @@ cena_tiro_inimigo = ExtResource("3_ckosc")
 cena_inimigo = ExtResource("3_0pxoi")
 cena_item = ExtResource("5_nb6mp")
 chance_drop = 0.15
+quadros_explosao_pequena = ExtResource("16_explosao_pequena")
+quadros_explosao_grande = ExtResource("17_explosao_grande")
+quadros_acerto = ExtResource("18_acerto")
 
 [node name="FundoEstrelado" type="Node2D" parent="." unique_id=1514568824]
 script = ExtResource("14_fundo")
@@ -88,3 +95,4 @@ offset_bottom = 27.0
 
 [node name="FlashDeDano" type="ColorRect" parent="." unique_id=686998824]
 script = ExtResource("15_flash")
+textura = ExtResource("19_flash_arte")

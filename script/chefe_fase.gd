@@ -10,6 +10,7 @@ signal disparou(posicao: Vector2, direcao: Vector2)
 signal aviso_iniciado  # o chefe vai fazer um ataque forte (telegrafar)
 signal etapa_mudou(etapa_atual: int, total_de_etapas: int)
 signal invocacao_solicitada(dados: DadosInimigo, posicao: Vector2)
+signal atingido(posicao_do_impacto: Vector2)  # um tiro acertou (para a faísca)
 
 const LIMITE_ESQUERDO_DA_PATRULHA := 60.0
 const LIMITE_DIREITO_DA_PATRULHA := 420.0
@@ -138,6 +139,7 @@ func _ao_receber_area(area: Area2D) -> void:
 	if entrando or vida <= 0:
 		return  # invulnerável durante a entrada
 	vida -= 1
+	atingido.emit(area.global_position)
 	vida_mudou.emit(vida, vida_maxima)
 	if vida <= 0:
 		derrotado.emit(pontos, global_position)

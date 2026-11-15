@@ -1,10 +1,14 @@
 [gd_resource type="Resource" script_class="DadosInimigo" format=3 uid="uid://4v284omfw45w"]
 
 [ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="1_0pm12"]
+[ext_resource type="Texture2D" uid="uid://cgqa862s26k1n" path="res://assets/arte/02_inimigos/bastiao.svg" id="2_arte"]
+[ext_resource type="Texture2D" uid="uid://40xvpqyg0lmu" path="res://assets/arte/02_inimigos/bastiao_dano.svg" id="3_arte_dano"]
 
 [resource]
 script = ExtResource("1_0pm12")
 nome = "Bastiao"
+textura = ExtResource("2_arte")
+textura_dano = ExtResource("3_arte_dano")
 vida = 3
 velocidade = 55.0
 pontos = 50

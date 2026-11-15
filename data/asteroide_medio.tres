@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="DadosInimigo" format=3]
+
+[ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="1_ast01"]
+[ext_resource type="Texture2D" uid="uid://cp2p7v0tuyx8v" path="res://assets/arte/06_cenarios/asteroide_02.svg" id="2_arte"]
+
+[resource]
+script = ExtResource("1_ast01")
+nome = "Asteroide médio"
+textura = ExtResource("2_arte")
+vida = 6
+velocidade = 60.0
+pontos = 10
+cor = Color(0.54509807, 0.4117647, 0.3137255, 1)
+forma = 3
+tamanho = Vector2(56, 56)
+velocidade_giro = 0.9
+metadata/_custom_type_script = "uid://ceelcslf8dq6m"

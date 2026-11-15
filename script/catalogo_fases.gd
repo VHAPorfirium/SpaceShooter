@@ -8,6 +8,8 @@ const BATEDOR := preload("res://data/batedor.tres")
 const SERPENTE := preload("res://data/serpente.tres")
 const BASTIAO := preload("res://data/bastiao.tres")
 const ASTEROIDE := preload("res://data/asteroide.tres")
+const ASTEROIDE_MEDIO := preload("res://data/asteroide_medio.tres")
+const ASTEROIDE_GRANDE := preload("res://data/asteroide_grande.tres")
 
 const TIRO_DUPLO := preload("res://data/tiro_duplo.tres")
 const TIRO_TRIPLO := preload("res://data/tiro_triplo.tres")
@@ -75,7 +77,7 @@ static func fase_1() -> DadosFase:
 
 
 ## Cinturão de asteroides: Batedores e Serpentes. Ensina formações e movimento lateral.
-## Asteroides (4 de vida, giram devagar) atravessam o caminho como perigo extra.
+## Asteroides em 3 tamanhos (pequeno, médio e grande: mais vida e pontos) atravessam o caminho como perigo extra.
 static func fase_2() -> DadosFase:
 	var fase := DadosFase.new()
 	fase.nome = "Fase 2: Cinturão de asteroides"
@@ -100,14 +102,14 @@ static func fase_2() -> DadosFase:
 		_onda(36.0, LINHA, SERPENTE, 3, 90.0, CENTRO),
 		_onda(42.0, FLANCOS, SERPENTE, 4, 70.0),
 		_onda(48.0, V, BATEDOR, 7, 40.0, CENTRO),
-		_onda(52.0, LINHA, ASTEROIDE, 2, 220.0, CENTRO),
+		_onda(52.0, LINHA, ASTEROIDE_MEDIO, 2, 220.0, CENTRO),
 		# respiro
 		# Bloco 3
 		_onda(60.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
 		_onda(64.0, V, BATEDOR, 5, 45.0, ESQUERDA),
 		_onda(66.0, V, BATEDOR, 5, 45.0, DIREITA),
 		_onda(72.0, FLANCOS, SERPENTE, 6, 65.0),
-		_onda(75.0, LINHA, ASTEROIDE, 1, 0.0, CENTRO),
+		_onda(75.0, LINHA, ASTEROIDE_GRANDE, 1, 0.0, CENTRO),
 		_onda(78.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
 		_onda(80.0, V, SERPENTE, 5, 55.0, CENTRO),
 		# respiro
@@ -123,7 +125,7 @@ static func fase_2() -> DadosFase:
 		_onda(122.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
 		_onda(125.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
 		_onda(128.0, FLANCOS, SERPENTE, 6, 65.0),
-		_onda(130.0, LINHA, ASTEROIDE, 1, 0.0, 340.0),
+		_onda(130.0, LINHA, ASTEROIDE_MEDIO, 1, 0.0, 340.0),
 		_onda(133.0, V, BATEDOR, 7, 40.0, CENTRO),
 		_onda(135.0, V, SERPENTE, 5, 55.0, CENTRO),
 		_onda(140.0, LINHA, SERPENTE, 4, 90.0, CENTRO),

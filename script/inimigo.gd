@@ -17,6 +17,8 @@ const FORMAS := {
 		Vector2(8, 21), Vector2(-10, 20), Vector2(-21, 8), Vector2(-20, -10)],
 }
 
+const TAMANHO_BASE_DO_DESENHO_DA_ROCHA := Vector2(40, 40)
+
 @export var dados: DadosInimigo
 
 var _vida: int
@@ -36,6 +38,8 @@ func _ready() -> void:
 	_x_inicial = position.x
 	$Desenho.polygon = PackedVector2Array(FORMAS[dados.forma])
 	$Desenho.color = dados.cor
+	if dados.forma == DadosInimigo.Forma.ROCHA:
+		$Desenho.scale = dados.tamanho / TAMANHO_BASE_DO_DESENHO_DA_ROCHA  # plano B acompanha o tamanho
 	$Imagem.exibir(dados.textura, dados.tamanho, [$Desenho])
 	var forma_colisao := RectangleShape2D.new()
 	forma_colisao.size = dados.tamanho
@@ -65,6 +69,8 @@ func _ao_receber_area(area: Area2D) -> void:
 	if _vida <= 0:
 		return  # evita pontuar duas vezes se dois tiros chegarem juntos
 	_vida -= 1
+	if _vida > 0 and dados.textura_dano != null:
+		$Imagem.trocar_textura(dados.textura_dano)  # mostra que já levou tiro
 	if _vida <= 0:
 		morreu.emit(dados.pontos, global_position)
 		queue_free()

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DadosInimigo" format=3]
+
+[ext_resource type="Script" uid="uid://ceelcslf8dq6m" path="res://script/dados_inimigo.gd" id="1_ast01"]
+
+[resource]
+script = ExtResource("1_ast01")
+nome = "Asteroide"
+vida = 4
+velocidade = 70.0
+pontos = 5
+cor = Color(0.54509807, 0.4117647, 0.3137255, 1)
+forma = 3
+tamanho = Vector2(40, 40)
+velocidade_giro = 1.2
+metadata/_custom_type_script = "uid://ceelcslf8dq6m"

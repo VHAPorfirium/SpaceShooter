@@ -2,7 +2,7 @@ class_name DadosInimigo
 extends Resource
 
 enum Movimento { RETO, ZIGZAG }
-enum Forma { TRIANGULO, SETA, BLOCO }
+enum Forma { TRIANGULO, SETA, BLOCO, ROCHA }
 
 @export var nome: String = "Batedor"
 @export var vida: int = 1
@@ -16,3 +16,5 @@ enum Forma { TRIANGULO, SETA, BLOCO }
 @export var frequencia: float = 3.0
 @export var atira: bool = false
 @export var intervalo_tiro: float = 1.4
+## Giro do desenho em radianos por segundo (asteroides). 0 = não gira.
+@export var velocidade_giro: float = 0.0

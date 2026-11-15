@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://45w5n6lhbmof" path="res://scenes/item_poder.tscn" id="5_nb6mp"]
 [ext_resource type="Script" uid="uid://b1ekn4tdpyrm8" path="res://script/gerenciador_fase.gd" id="12_t8783"]
 [ext_resource type="Script" uid="uid://bfup4d8q4t3ga" path="res://script/pausa.gd" id="13_fj78b"]
+[ext_resource type="Script" uid="uid://dc718kuiyklj0" path="res://script/fundo_estrelado.gd" id="14_fundo"]
+[ext_resource type="Script" uid="uid://d1coybwjgnngo" path="res://script/flash_de_dano.gd" id="15_flash"]
 
 [node name="Principal" type="Node2D" unique_id=1697945304]
 script = ExtResource("1_6f3be")
@@ -16,6 +18,9 @@ cena_tiro_inimigo = ExtResource("3_ckosc")
 cena_inimigo = ExtResource("3_0pxoi")
 cena_item = ExtResource("5_nb6mp")
 chance_drop = 0.15
+
+[node name="FundoEstrelado" type="Node2D" parent="." unique_id=1514568824]
+script = ExtResource("14_fundo")
 
 [node name="Jogador" parent="." unique_id=732930375 instance=ExtResource("3_jccv5")]
 position = Vector2(240, 630)
@@ -57,11 +62,13 @@ offset_bottom = 83.0
 
 [node name="Itens" type="Node2D" parent="." unique_id=999731342]
 
+[node name="Efeitos" type="Node2D" parent="." unique_id=822390858]
+
 [node name="Fase" type="Node2D" parent="." unique_id=702810174]
 script = ExtResource("12_t8783")
 
 [node name="TempoTransicao" type="Timer" parent="." unique_id=1382182517]
-wait_time = 3.0
+wait_time = 4.0
 one_shot = true
 
 [node name="FaseLabel" type="Label" parent="." unique_id=1981784933]
@@ -78,3 +85,6 @@ offset_bottom = 23.0
 [node name="BarraChefe" type="ProgressBar" parent="." unique_id=537961307]
 offset_right = 4.0
 offset_bottom = 27.0
+
+[node name="FlashDeDano" type="ColorRect" parent="." unique_id=686998824]
+script = ExtResource("15_flash")

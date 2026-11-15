@@ -2,9 +2,11 @@
 
 [ext_resource type="Script" uid="uid://c5r8qc4k57sb2" path="res://script/ajudante.gd" id="1_bsyia"]
 [ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
+[ext_resource type="Texture2D" uid="uid://gr5m0atbu5ej" path="res://assets/arte/01_jogador/ajudante.svg" id="91_ajudante"]
 
 [node name="Ajudante" type="Node2D" unique_id=1946358928]
 script = ExtResource("1_bsyia")
+textura = ExtResource("91_ajudante")
 
 [node name="Desenho" type="Polygon2D" parent="." unique_id=88798574]
 

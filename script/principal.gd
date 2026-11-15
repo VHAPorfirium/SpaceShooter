@@ -15,6 +15,7 @@ var _ondas_acabaram: bool = false
 var _chefe_ativo: bool = false
 var _pontos: int = 0
 var _recorde: int = 0
+var _nome_do_chefe_atual: String = ""
 
 @onready var _jogador: Area2D = $Jogador
 @onready var _tiros: Node2D = $Tiros
@@ -64,6 +65,7 @@ func _ready() -> void:
 
 	_fases.append(CatalogoFases.fase_1())
 	_fases.append(CatalogoFases.fase_2())
+	_fases.append(CatalogoFases.fase_3())
 	_iniciar_fase(0)
 
 
@@ -113,8 +115,11 @@ func _iniciar_chefe(fase: DadosFase) -> void:
 	chefe.derrotado.connect(_ao_chefe_derrotado)
 	chefe.disparou.connect(_ao_chefe_disparar)
 	chefe.aviso_iniciado.connect(_ao_chefe_iniciar_aviso)
+	chefe.etapa_mudou.connect(_ao_chefe_mudar_etapa)
+	chefe.invocacao_solicitada.connect(_ao_spawn_solicitado)
 	_inimigos.add_child(chefe)
-	_fase_label.text = "Chefe: %s" % chefe.nome
+	_fase_label.text = _texto_do_chefe(chefe.nome, chefe.etapa_atual, chefe.total_de_etapas())
+	_nome_do_chefe_atual = chefe.nome
 	if fase.musica_chefe != null:
 		GerenciadorAudio.tocar_musica(fase.musica_chefe)
 
@@ -225,6 +230,16 @@ func _ao_jogador_coletar_poder(_poder: DadosPoder) -> void:
 	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.PODER_COLETADO)
 
 
+func _ao_chefe_mudar_etapa(etapa_atual: int, total_de_etapas: int) -> void:
+	_fase_label.text = _texto_do_chefe(_nome_do_chefe_atual, etapa_atual, total_de_etapas)
+
+
+func _texto_do_chefe(nome_do_chefe: String, etapa_atual: int, total_de_etapas: int) -> String:
+	if total_de_etapas <= 1:
+		return "Chefe: %s" % nome_do_chefe
+	return "Chefe: %s (etapa %d/%d)" % [nome_do_chefe, etapa_atual, total_de_etapas]
+
+
 func _ao_chefe_iniciar_aviso() -> void:
 	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.AVISO_CHEFE)
 
@@ -234,6 +249,8 @@ func _ao_poderes_mudarem(texto: String) -> void:
 
 
 func _ao_jogador_destruido() -> void:
+	if _estado == Estado.VITORIA:
+		return  # um Batedor que sobrou não pode transformar a vitória em derrota
 	_estado = Estado.FIM
 	_tempo_transicao.stop()
 	_finalizar_partida("FIM DE JOGO", GerenciadorAudio.Efeito.FIM_DE_JOGO)

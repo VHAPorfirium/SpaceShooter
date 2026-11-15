@@ -6,6 +6,7 @@ extends RefCounted
 
 const BATEDOR := preload("res://data/batedor.tres")
 const SERPENTE := preload("res://data/serpente.tres")
+const BASTIAO := preload("res://data/bastiao.tres")
 
 const TIRO_DUPLO := preload("res://data/tiro_duplo.tres")
 const TIRO_TRIPLO := preload("res://data/tiro_triplo.tres")
@@ -14,9 +15,11 @@ const AJUDANTE := preload("res://data/ajudante.tres")
 
 const SENTINELA := preload("res://scenes/sentinela.tscn")
 const CEIFADOR := preload("res://scenes/ceifador.tscn")
+const COLMEIA := preload("res://scenes/colmeia.tscn")
 
 const MUSICA_FASE_1 := preload("res://assets/audio/musicas/fase_1.wav")
 const MUSICA_FASE_2 := preload("res://assets/audio/musicas/fase_2.wav")
+const MUSICA_FASE_3 := preload("res://assets/audio/musicas/fase_3.wav")
 const MUSICA_CHEFE := preload("res://assets/audio/musicas/chefe.wav")
 
 const LINHA := DadosOnda.Formacao.LINHA
@@ -121,6 +124,60 @@ static func fase_2() -> DadosFase:
 		_onda(157.0, LINHA, BATEDOR, 4, 60.0, DIREITA),
 		_onda(161.0, FLANCOS, SERPENTE, 6, 65.0),
 		_onda(164.0, V, BATEDOR, 7, 40.0, CENTRO),
+	])
+	return fase
+
+
+
+## Nave-Mãe: os três inimigos. Ensina tiros inimigos e prioridade de alvos:
+## os Bastiões (lentos, 3 de vida, atiram) vêm escoltados por Batedores rápidos.
+static func fase_3() -> DadosFase:
+	var fase := DadosFase.new()
+	fase.nome = "Fase 3: Nave-Mãe"
+	fase.cor_fundo = Color("#2b0d24")
+	fase.poderes.assign([TIRO_DUPLO, TIRO_TRIPLO, ESCUDO, AJUDANTE])
+	fase.chefe = COLMEIA
+	fase.musica = MUSICA_FASE_3
+	fase.musica_chefe = MUSICA_CHEFE
+	fase.ondas.assign([
+		# Bloco 1: apresenta o Bastião, poucos e bem separados
+		_onda(2.0, LINHA, BASTIAO, 2, 160.0, CENTRO),
+		_onda(9.0, V, BATEDOR, 5, 45.0, CENTRO),
+		_onda(13.0, LINHA, BASTIAO, 3, 120.0, CENTRO),
+		_onda(19.0, FLANCOS, SERPENTE, 4, 70.0),
+		# respiro
+		# Bloco 2: Bastiões com escolta (quem derrubar primeiro?)
+		_onda(30.0, LINHA, BASTIAO, 3, 120.0, CENTRO),
+		_onda(32.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(38.0, FLANCOS, BASTIAO, 4, 70.0),
+		_onda(44.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(48.0, V, BATEDOR, 5, 45.0, ESQUERDA),
+		_onda(50.0, V, BATEDOR, 5, 45.0, DIREITA),
+		# respiro
+		# Bloco 3: chuva de projéteis
+		_onda(62.0, LINHA, BASTIAO, 5, 90.0, CENTRO),
+		_onda(66.0, V, SERPENTE, 5, 55.0, CENTRO),
+		_onda(72.0, FLANCOS, BATEDOR, 8, 50.0),
+		_onda(76.0, V, BASTIAO, 3, 70.0, CENTRO),
+		_onda(82.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		# respiro
+		# Bloco 4: prioridade de alvos
+		_onda(94.0, LINHA, BASTIAO, 4, 100.0, CENTRO),
+		_onda(95.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(100.0, FLANCOS, SERPENTE, 6, 65.0),
+		_onda(106.0, LINHA, BASTIAO, 3, 60.0, ESQUERDA),
+		_onda(108.0, LINHA, BASTIAO, 3, 60.0, DIREITA),
+		_onda(112.0, V, BATEDOR, 7, 40.0, CENTRO),
+		# respiro
+		# Bloco 5: teste final antes da Colmeia
+		_onda(124.0, V, BASTIAO, 5, 55.0, CENTRO),
+		_onda(127.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(131.0, FLANCOS, BATEDOR, 8, 50.0),
+		_onda(135.0, LINHA, BASTIAO, 5, 90.0, CENTRO),
+		_onda(138.0, V, SERPENTE, 7, 45.0, CENTRO),
+		_onda(142.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(146.0, FLANCOS, BASTIAO, 4, 70.0),
+		_onda(150.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
 	])
 	return fase
 

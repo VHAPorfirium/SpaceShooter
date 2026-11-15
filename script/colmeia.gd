@@ -163,12 +163,12 @@ func _iniciar_aviso() -> void:
 
 func _atualizar_aviso(delta: float) -> void:
 	_tempo_no_estado -= delta
-	_piscar_aviso($Desenho, _tempo_no_estado, _cor_da_etapa(), COR_AVISO)
+	_piscar_aviso(_tempo_no_estado, _cor_da_etapa(), COR_AVISO)
 	if etapa_atual >= 3:
 		position.x = move_toward(position.x, _alvo_x_da_investida, 240.0 * delta)
 	if _tempo_no_estado > 0.0:
 		return
-	$Desenho.color = _cor_da_etapa()
+	_restaurar_visual(_cor_da_etapa())
 	_executar_ataque_avisado()
 
 
@@ -188,9 +188,9 @@ func _atualizar_troca_de_etapa(delta: float) -> void:
 	_tempo_no_estado -= delta
 	position.y = move_toward(position.y, altura_parada, velocidade_retorno * delta)
 	position.x = move_toward(position.x, CENTRO_DA_TELA_X, 120.0 * delta)
-	_piscar_aviso($Desenho, _tempo_no_estado, _cor_da_etapa(), COR_AVISO)
+	_piscar_aviso(_tempo_no_estado, _cor_da_etapa(), COR_AVISO)
 	if _tempo_no_estado <= 0.0 and is_equal_approx(position.y, altura_parada):
-		$Desenho.color = _cor_da_etapa()
+		_restaurar_visual(_cor_da_etapa())
 		_estado = Estado.ATACANDO
 		_tempo_ate_o_ataque = 1.0
 		_tempo_ate_o_tiro_secundario = intervalo_tiro_mirado

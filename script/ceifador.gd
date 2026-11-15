@@ -48,9 +48,9 @@ func _atualizar(delta: float) -> void:
 		Estado.AVISO:
 			_tempo -= delta
 			position.x = move_toward(position.x, _alvo_x, 220.0 * delta)
-			_piscar_aviso($Desenho, _tempo, COR_BASE, COR_AVISO)
+			_piscar_aviso(_tempo, COR_BASE, COR_AVISO)
 			if _tempo <= 0.0:
-				$Desenho.color = COR_BASE
+				_restaurar_visual(COR_BASE)
 				_estado = Estado.INVESTIDA
 		Estado.INVESTIDA:
 			position.y += velocidade_investida * delta

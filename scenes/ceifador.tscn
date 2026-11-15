@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cdm71xdgv3jp7" path="res://script/ceifador.gd" id="1_g5agv"]
 [ext_resource type="Script" uid="uid://bek6pk86tqygf" path="res://script/sprite_com_plano_b.gd" id="90_imagem"]
+[ext_resource type="Texture2D" uid="uid://b0vy7txci2wmt" path="res://assets/arte/04_chefes/ceifador.svg" id="91_arte"]
+[ext_resource type="Texture2D" uid="uid://31wuoooe58cn" path="res://assets/arte/04_chefes/ceifador_aviso.svg" id="92_arte"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hjp0y"]
 size = Vector2(100, 54)
@@ -10,6 +12,8 @@ size = Vector2(100, 54)
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_g5agv")
+texturas_por_etapa = Array[Texture2D]([ExtResource("91_arte")])
+texturas_de_aviso_por_etapa = Array[Texture2D]([ExtResource("92_arte")])
 
 [node name="Forma" type="CollisionShape2D" parent="." unique_id=1797006073]
 shape = SubResource("RectangleShape2D_hjp0y")

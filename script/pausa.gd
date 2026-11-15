@@ -22,7 +22,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if not habilitada:
 		return
-	if tecla.keycode == KEY_P or tecla.keycode == KEY_ESCAPE:
+	if event.is_action_pressed("Pausa"):  # P ou Esc, definidos no mapa de teclas
 		_alternar()
 		get_viewport().set_input_as_handled()
 	elif get_tree().paused and tecla.keycode == KEY_M:

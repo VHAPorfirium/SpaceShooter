@@ -1,39 +1,137 @@
 class_name CatalogoFases
 extends RefCounted
 
+## Roteiro de cada fase, seguindo o GDD (introduzir -> combinar -> testar).
+## Para balancear, mexa nos momentos, quantidades e espaçamentos abaixo.
+
 const BATEDOR := preload("res://data/batedor.tres")
 const SERPENTE := preload("res://data/serpente.tres")
-const BASTIAO := preload("res://data/bastiao.tres")
+
+const TIRO_DUPLO := preload("res://data/tiro_duplo.tres")
+const TIRO_TRIPLO := preload("res://data/tiro_triplo.tres")
+const ESCUDO := preload("res://data/escudo.tres")
+const AJUDANTE := preload("res://data/ajudante.tres")
+
 const SENTINELA := preload("res://scenes/sentinela.tscn")
 const CEIFADOR := preload("res://scenes/ceifador.tscn")
+
 const MUSICA_FASE_1 := preload("res://assets/audio/musicas/fase_1.wav")
 const MUSICA_FASE_2 := preload("res://assets/audio/musicas/fase_2.wav")
 const MUSICA_CHEFE := preload("res://assets/audio/musicas/chefe.wav")
 
+const LINHA := DadosOnda.Formacao.LINHA
+const V := DadosOnda.Formacao.V
+const FLANCOS := DadosOnda.Formacao.FLANCOS
+const CENTRO := 240.0
+const ESQUERDA := 140.0
+const DIREITA := 340.0
 
+
+## Órbita da Terra: só Batedores. Ensina a mover, atirar e desviar.
 static func fase_1() -> DadosFase:
-	var f := DadosFase.new()
-	f.nome = "Fase 1: Órbita da Terra"
-	f.cor_fundo = Color("#0d1b3a")
-	f.duracao = 150.0
-	f.intervalo_inicial = 1.4
-	f.intervalo_final = 0.9
-	f.tipos.assign([BATEDOR, BATEDOR, BATEDOR, SERPENTE, BASTIAO])
-	f.chefe = SENTINELA
-	f.musica = MUSICA_FASE_1
-	f.musica_chefe = MUSICA_CHEFE
-	return f
+	var fase := DadosFase.new()
+	fase.nome = "Fase 1: Órbita da Terra"
+	fase.cor_fundo = Color("#0d1b3a")
+	fase.poderes.assign([TIRO_DUPLO, TIRO_TRIPLO])
+	fase.chefe = SENTINELA
+	fase.musica = MUSICA_FASE_1
+	fase.musica_chefe = MUSICA_CHEFE
+	fase.ondas.assign([
+		# Bloco 1: apresentação, poucos inimigos e bem espaçados
+		_onda(2.0, LINHA, BATEDOR, 3, 80.0, CENTRO),
+		_onda(7.0, LINHA, BATEDOR, 3, 70.0, ESQUERDA),
+		_onda(11.0, LINHA, BATEDOR, 3, 70.0, DIREITA),
+		_onda(16.0, V, BATEDOR, 5, 45.0, CENTRO),
+		_onda(23.0, LINHA, BATEDOR, 5, 60.0, CENTRO),
+		_onda(28.0, FLANCOS, BATEDOR, 4, 60.0),
+		# respiro
+		# Bloco 2: formações em sequência
+		_onda(38.0, V, BATEDOR, 5, 45.0, ESQUERDA),
+		_onda(42.0, V, BATEDOR, 5, 45.0, DIREITA),
+		_onda(48.0, LINHA, BATEDOR, 6, 65.0, CENTRO),
+		_onda(53.0, FLANCOS, BATEDOR, 6, 55.0),
+		# respiro
+		# Bloco 3: ritmo mais rápido
+		_onda(64.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(70.0, LINHA, BATEDOR, 4, 60.0, ESQUERDA),
+		_onda(72.0, LINHA, BATEDOR, 4, 60.0, DIREITA),
+		_onda(78.0, FLANCOS, BATEDOR, 6, 50.0),
+		_onda(84.0, V, BATEDOR, 5, 45.0, CENTRO),
+		# respiro
+		# Bloco 4: teste antes do chefe
+		_onda(96.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		_onda(101.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(106.0, FLANCOS, BATEDOR, 8, 50.0),
+		_onda(112.0, LINHA, BATEDOR, 5, 55.0, ESQUERDA),
+		_onda(114.0, LINHA, BATEDOR, 5, 55.0, DIREITA),
+	])
+	return fase
 
 
+## Cinturão de asteroides: Batedores e Serpentes. Ensina formações e movimento lateral.
 static func fase_2() -> DadosFase:
-	var f := DadosFase.new()
-	f.nome = "Fase 2: Cinturão de asteroides"
-	f.cor_fundo = Color("#2a1a12")
-	f.duracao = 180.0
-	f.intervalo_inicial = 1.1
-	f.intervalo_final = 0.5
-	f.tipos.assign([BATEDOR, BATEDOR, SERPENTE, SERPENTE, BASTIAO, BASTIAO])
-	f.chefe = CEIFADOR
-	f.musica = MUSICA_FASE_2
-	f.musica_chefe = MUSICA_CHEFE
-	return f
+	var fase := DadosFase.new()
+	fase.nome = "Fase 2: Cinturão de asteroides"
+	fase.cor_fundo = Color("#2a1a12")
+	fase.poderes.assign([ESCUDO, AJUDANTE])
+	fase.chefe = CEIFADOR
+	fase.musica = MUSICA_FASE_2
+	fase.musica_chefe = MUSICA_CHEFE
+	fase.ondas.assign([
+		# Bloco 1: apresenta a Serpente sozinha, depois mistura
+		_onda(2.0, LINHA, SERPENTE, 3, 90.0, CENTRO),
+		_onda(8.0, V, BATEDOR, 5, 45.0, CENTRO),
+		_onda(13.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(19.0, FLANCOS, BATEDOR, 6, 55.0),
+		# respiro
+		# Bloco 2
+		_onda(28.0, V, SERPENTE, 5, 55.0, CENTRO),
+		_onda(34.0, LINHA, BATEDOR, 6, 65.0, CENTRO),
+		_onda(36.0, LINHA, SERPENTE, 3, 90.0, CENTRO),
+		_onda(42.0, FLANCOS, SERPENTE, 4, 70.0),
+		_onda(48.0, V, BATEDOR, 7, 40.0, CENTRO),
+		# respiro
+		# Bloco 3
+		_onda(60.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(64.0, V, BATEDOR, 5, 45.0, ESQUERDA),
+		_onda(66.0, V, BATEDOR, 5, 45.0, DIREITA),
+		_onda(72.0, FLANCOS, SERPENTE, 6, 65.0),
+		_onda(78.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		_onda(80.0, V, SERPENTE, 5, 55.0, CENTRO),
+		# respiro
+		# Bloco 4
+		_onda(92.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(95.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(100.0, FLANCOS, BATEDOR, 8, 50.0),
+		_onda(104.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(110.0, V, SERPENTE, 7, 45.0, CENTRO),
+		# respiro
+		# Bloco 5: teste antes do chefe
+		_onda(122.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		_onda(125.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		_onda(128.0, FLANCOS, SERPENTE, 6, 65.0),
+		_onda(133.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(135.0, V, SERPENTE, 5, 55.0, CENTRO),
+		_onda(140.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(142.0, FLANCOS, BATEDOR, 8, 50.0),
+		# respiro curto
+		# Bloco 6: rajada final, tudo junto
+		_onda(152.0, V, SERPENTE, 7, 45.0, CENTRO),
+		_onda(155.0, LINHA, BATEDOR, 4, 60.0, ESQUERDA),
+		_onda(157.0, LINHA, BATEDOR, 4, 60.0, DIREITA),
+		_onda(161.0, FLANCOS, SERPENTE, 6, 65.0),
+		_onda(164.0, V, BATEDOR, 7, 40.0, CENTRO),
+	])
+	return fase
+
+
+static func _onda(momento_segundos: float, formacao: DadosOnda.Formacao, tipo_inimigo: DadosInimigo,
+		quantidade: int, espacamento: float, posicao_central_x: float = CENTRO) -> DadosOnda:
+	var onda := DadosOnda.new()
+	onda.momento_segundos = momento_segundos
+	onda.formacao = formacao
+	onda.tipo_inimigo = tipo_inimigo
+	onda.quantidade = quantidade
+	onda.espacamento = espacamento
+	onda.posicao_central_x = posicao_central_x
+	return onda

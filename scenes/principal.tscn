@@ -6,13 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://caf8bvqajvbw" path="res://scenes/tiro_inimigo.tscn" id="3_ckosc"]
 [ext_resource type="PackedScene" uid="uid://csj1h2r4aok2r" path="res://scenes/jogador.tscn" id="3_jccv5"]
 [ext_resource type="PackedScene" uid="uid://45w5n6lhbmof" path="res://scenes/item_poder.tscn" id="5_nb6mp"]
-[ext_resource type="Script" uid="uid://dmudhv7kjtr3o" path="res://script/dados_poder.gd" id="10_pvsfa"]
-[ext_resource type="Resource" uid="uid://cr8s2k8cy83pu" path="res://data/tiro_duplo.tres" id="11_v36gc"]
 [ext_resource type="Script" uid="uid://b1ekn4tdpyrm8" path="res://script/gerenciador_fase.gd" id="12_t8783"]
-[ext_resource type="Resource" uid="uid://dhgco1t4ylsq4" path="res://data/tiro_triplo.tres" id="12_xyofb"]
-[ext_resource type="Resource" uid="uid://cipdg5nnl827l" path="res://data/escudo.tres" id="13_cf5mm"]
 [ext_resource type="Script" uid="uid://bfup4d8q4t3ga" path="res://script/pausa.gd" id="13_fj78b"]
-[ext_resource type="Resource" uid="uid://dln3nqyp0p5uf" path="res://data/ajudante.tres" id="14_pvsfa"]
 
 [node name="Principal" type="Node2D" unique_id=1697945304]
 script = ExtResource("1_6f3be")
@@ -20,7 +15,6 @@ cena_tiro = ExtResource("2_j5742")
 cena_tiro_inimigo = ExtResource("3_ckosc")
 cena_inimigo = ExtResource("3_0pxoi")
 cena_item = ExtResource("5_nb6mp")
-poderes = Array[ExtResource("10_pvsfa")]([ExtResource("11_v36gc"), ExtResource("12_xyofb"), ExtResource("13_cf5mm"), ExtResource("14_pvsfa")])
 chance_drop = 0.15
 
 [node name="Jogador" parent="." unique_id=732930375 instance=ExtResource("3_jccv5")]

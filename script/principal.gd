@@ -6,7 +6,6 @@ enum Estado { JOGANDO, TRANSICAO, FIM, VITORIA }
 @export var cena_tiro_inimigo: PackedScene
 @export var cena_inimigo: PackedScene
 @export var cena_item: PackedScene
-@export var poderes: Array[DadosPoder]
 @export var chance_drop: float = 0.12
 
 var _fases: Array[DadosFase] = []
@@ -40,7 +39,7 @@ func _ready() -> void:
 	_jogador.poderes_mudaram.connect(_ao_poderes_mudarem)
 	_jogador.destruida.connect(_ao_jogador_destruido)
 	_gerenciador.spawn_solicitado.connect(_ao_spawn_solicitado)
-	_gerenciador.tempo_esgotado.connect(_ao_ondas_esgotadas)
+	_gerenciador.roteiro_concluido.connect(_ao_ondas_esgotadas)
 	_tempo_transicao.timeout.connect(_ao_fim_transicao)
 
 	_mensagem.visible = false
@@ -202,12 +201,13 @@ func _ao_inimigo_morrer(pontos: int, posicao: Vector2) -> void:
 
 
 func _tentar_dropar(posicao: Vector2) -> void:
-	if poderes.is_empty() or cena_item == null:
+	var poderes_da_fase := _fases[_fase_atual].poderes
+	if poderes_da_fase.is_empty() or cena_item == null:
 		return
 	if randf() > chance_drop:
 		return
 	var item: ItemPoder = cena_item.instantiate()
-	item.dados = poderes.pick_random()
+	item.dados = poderes_da_fase.pick_random()
 	item.position = posicao
 	_itens.add_child(item)
 

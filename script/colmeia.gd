@@ -53,7 +53,7 @@ func _ready() -> void:
 	nome = "Colmeia"
 	vida_maxima = 160
 	pontos = 1000
-	altura_parada = 120.0
+	altura_parada = 155.0
 	limites_das_etapas.assign([0.66, 0.33])
 	super()
 	$Desenho.polygon = PackedVector2Array([

@@ -3,7 +3,7 @@ extends Resource
 
 ## Ficha de uma onda do roteiro: em tal momento, tal formação de tal inimigo.
 
-enum Formacao { LINHA, V, FLANCOS }
+enum Formacao { LINHA, V, FLANCOS, DISPERSA, DIAGONAL_ESQ, DIAGONAL_DIR, ARCO }
 
 ## Segundos desde o início da fase em que a onda entra em cena.
 @export var momento_segundos: float = 0.0

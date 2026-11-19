@@ -21,6 +21,21 @@ static func calcular_posicoes(onda: DadosOnda, margem_lateral: float) -> Array[V
 			posicoes = _posicoes_em_v(onda)
 		DadosOnda.Formacao.FLANCOS:
 			posicoes = _posicoes_nos_flancos(onda, margem_lateral)
+		DadosOnda.Formacao.DISPERSA:
+			posicoes = _posicoes_dispersas(onda, margem_lateral)
+		DadosOnda.Formacao.DIAGONAL_ESQ:
+			posicoes = _posicoes_em_diagonal(onda, -1.0)
+		DadosOnda.Formacao.DIAGONAL_DIR:
+			posicoes = _posicoes_em_diagonal(onda, 1.0)
+		DadosOnda.Formacao.ARCO:
+			posicoes = _posicoes_em_arco(onda)
+
+	# Adiciona leve variação orgânica (jitter) para não ficarem mecanicamente idênticos
+	for i in posicoes.size():
+		var variacao_x := randf_range(-8.0, 8.0)
+		var variacao_y := randf_range(-10.0, 10.0)
+		posicoes[i] += Vector2(variacao_x, variacao_y)
+
 	return _manter_dentro_da_tela(posicoes, margem_lateral)
 
 
@@ -57,9 +72,47 @@ static func _posicoes_nos_flancos(onda: DadosOnda, margem_lateral: float) -> Arr
 	return posicoes
 
 
+## Formação quase aleatória / dispersa: cobre a tela de forma orgânica e imprevisível.
+static func _posicoes_dispersas(onda: DadosOnda, margem_lateral: float) -> Array[Vector2]:
+	var posicoes: Array[Vector2] = []
+	var largura_util := (LARGURA_DA_TELA - margem_lateral * 2.0)
+	var passo_x := largura_util / float(maxi(onda.quantidade, 1))
+	for indice in onda.quantidade:
+		var base_x := margem_lateral + (indice + 0.5) * passo_x + randf_range(-passo_x * 0.35, passo_x * 0.35)
+		var entrada_y := ALTURA_DE_ENTRADA - randf_range(0.0, 70.0)
+		posicoes.append(Vector2(base_x, entrada_y))
+	return posicoes
+
+
+## Formação diagonal (escadinha vindo de um lado para o outro).
+static func _posicoes_em_diagonal(onda: DadosOnda, direcao: float) -> Array[Vector2]:
+	var posicoes: Array[Vector2] = []
+	var largura_total := onda.espacamento * (onda.quantidade - 1)
+	var inicio_x := onda.posicao_central_x - (largura_total / 2.0) * direcao
+	for indice in onda.quantidade:
+		var x := inicio_x + indice * onda.espacamento * direcao
+		var y := ALTURA_DE_ENTRADA - indice * (onda.espacamento * 0.6)
+		posicoes.append(Vector2(x, y))
+	return posicoes
+
+
+## Formação em arco (curvatura suave cercando a nave).
+static func _posicoes_em_arco(onda: DadosOnda, raio: float = 120.0) -> Array[Vector2]:
+	var posicoes: Array[Vector2] = []
+	var angulo_total := PI * 0.55
+	for indice in onda.quantidade:
+		var fracao := 0.5 if onda.quantidade <= 1 else float(indice) / float(onda.quantidade - 1)
+		var angulo := lerpf(-angulo_total / 2.0, angulo_total / 2.0, fracao)
+		var x := onda.posicao_central_x + sin(angulo) * raio
+		var y := ALTURA_DE_ENTRADA - (1.0 - cos(angulo)) * (raio * 0.7)
+		posicoes.append(Vector2(x, y))
+	return posicoes
+
+
 static func _manter_dentro_da_tela(posicoes: Array[Vector2], margem_lateral: float) -> Array[Vector2]:
 	var posicoes_ajustadas: Array[Vector2] = []
 	for posicao in posicoes:
 		posicoes_ajustadas.append(Vector2(
 			clampf(posicao.x, margem_lateral, LARGURA_DA_TELA - margem_lateral), posicao.y))
 	return posicoes_ajustadas
+

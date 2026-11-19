@@ -18,7 +18,7 @@ const LIMITE_DIREITO_DA_PATRULHA := 420.0
 @export var nome: String = "Chefe"
 @export var vida_maxima: int = 50
 @export var pontos: int = 300
-@export var altura_parada: float = 110.0
+@export var altura_parada: float = 145.0
 ## Arte do chefe, uma por etapa (a Colmeia tem 3; os outros, 1). Vazio = desenho geométrico.
 @export var texturas_por_etapa: Array[Texture2D] = []
 ## Versão "acesa" da arte, uma por etapa, alternada com a normal durante o aviso de ataque.

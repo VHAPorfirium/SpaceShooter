@@ -34,6 +34,10 @@ const MUSICA_CHEFE := preload("res://assets/audio/musicas/chefe.wav")
 const LINHA := DadosOnda.Formacao.LINHA
 const V := DadosOnda.Formacao.V
 const FLANCOS := DadosOnda.Formacao.FLANCOS
+const DISPERSA := DadosOnda.Formacao.DISPERSA
+const DIAGONAL_ESQ := DadosOnda.Formacao.DIAGONAL_ESQ
+const DIAGONAL_DIR := DadosOnda.Formacao.DIAGONAL_DIR
+const ARCO := DadosOnda.Formacao.ARCO
 const CENTRO := 240.0
 const ESQUERDA := 140.0
 const DIREITA := 340.0
@@ -54,31 +58,31 @@ static func fase_1() -> DadosFase:
 	fase.ondas.assign([
 		# Bloco 1: apresentação, poucos inimigos e bem espaçados
 		_onda(2.0, LINHA, BATEDOR, 3, 80.0, CENTRO),
-		_onda(7.0, LINHA, BATEDOR, 3, 70.0, ESQUERDA),
-		_onda(11.0, LINHA, BATEDOR, 3, 70.0, DIREITA),
-		_onda(16.0, V, BATEDOR, 5, 45.0, CENTRO),
-		_onda(23.0, LINHA, BATEDOR, 5, 60.0, CENTRO),
+		_onda(7.0, DIAGONAL_DIR, BATEDOR, 4, 60.0, ESQUERDA),
+		_onda(12.0, DIAGONAL_ESQ, BATEDOR, 4, 60.0, DIREITA),
+		_onda(17.0, V, BATEDOR, 5, 45.0, CENTRO),
+		_onda(23.0, DISPERSA, BATEDOR, 5, 50.0, CENTRO),
 		_onda(28.0, FLANCOS, BATEDOR, 4, 60.0),
 		# respiro
-		# Bloco 2: formações em sequência
-		_onda(38.0, V, BATEDOR, 5, 45.0, ESQUERDA),
-		_onda(42.0, V, BATEDOR, 5, 45.0, DIREITA),
-		_onda(48.0, LINHA, BATEDOR, 6, 65.0, CENTRO),
-		_onda(53.0, FLANCOS, BATEDOR, 6, 55.0),
+		# Bloco 2: formações dinâmicas
+		_onda(38.0, DIAGONAL_DIR, BATEDOR, 5, 50.0, ESQUERDA),
+		_onda(42.0, DIAGONAL_ESQ, BATEDOR, 5, 50.0, DIREITA),
+		_onda(48.0, ARCO, BATEDOR, 6, 50.0, CENTRO),
+		_onda(53.0, DISPERSA, BATEDOR, 6, 55.0, CENTRO),
 		# respiro
-		# Bloco 3: ritmo mais rápido
+		# Bloco 3: ritmo mais rápido e imprevisível
 		_onda(64.0, V, BATEDOR, 7, 40.0, CENTRO),
-		_onda(70.0, LINHA, BATEDOR, 4, 60.0, ESQUERDA),
-		_onda(72.0, LINHA, BATEDOR, 4, 60.0, DIREITA),
+		_onda(70.0, DIAGONAL_DIR, BATEDOR, 5, 55.0, ESQUERDA),
+		_onda(73.0, DIAGONAL_ESQ, BATEDOR, 5, 55.0, DIREITA),
 		_onda(78.0, FLANCOS, BATEDOR, 6, 50.0),
-		_onda(84.0, V, BATEDOR, 5, 45.0, CENTRO),
+		_onda(84.0, DISPERSA, BATEDOR, 7, 45.0, CENTRO),
 		# respiro
-		# Bloco 4: teste antes do chefe
-		_onda(96.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		# Bloco 4: teste variado antes do chefe
+		_onda(96.0, ARCO, BATEDOR, 7, 45.0, CENTRO),
 		_onda(101.0, V, BATEDOR, 7, 40.0, CENTRO),
-		_onda(106.0, FLANCOS, BATEDOR, 8, 50.0),
-		_onda(112.0, LINHA, BATEDOR, 5, 55.0, ESQUERDA),
-		_onda(114.0, LINHA, BATEDOR, 5, 55.0, DIREITA),
+		_onda(106.0, DISPERSA, BATEDOR, 8, 45.0, CENTRO),
+		_onda(112.0, DIAGONAL_DIR, BATEDOR, 5, 55.0, ESQUERDA),
+		_onda(114.0, DIAGONAL_ESQ, BATEDOR, 5, 55.0, DIREITA),
 	])
 	return fase
 
@@ -99,52 +103,52 @@ static func fase_2() -> DadosFase:
 	fase.ondas.assign([
 		# Bloco 1: apresenta a Serpente sozinha, depois mistura
 		_onda(2.0, LINHA, SERPENTE, 3, 90.0, CENTRO),
-		_onda(8.0, V, BATEDOR, 5, 45.0, CENTRO),
-		_onda(13.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(8.0, DIAGONAL_DIR, BATEDOR, 5, 50.0, ESQUERDA),
+		_onda(13.0, DISPERSA, SERPENTE, 4, 80.0, CENTRO),
 		_onda(19.0, FLANCOS, BATEDOR, 6, 55.0),
 		_onda(22.0, LINHA, ASTEROIDE, 1, 0.0, 130.0),
 		# respiro
-		# Bloco 2
-		_onda(28.0, V, SERPENTE, 5, 55.0, CENTRO),
-		_onda(34.0, LINHA, BATEDOR, 6, 65.0, CENTRO),
-		_onda(36.0, LINHA, SERPENTE, 3, 90.0, CENTRO),
+		# Bloco 2: arcos e dispersão entre rochas
+		_onda(28.0, ARCO, SERPENTE, 5, 55.0, CENTRO),
+		_onda(34.0, DIAGONAL_ESQ, BATEDOR, 6, 50.0, DIREITA),
+		_onda(36.0, DISPERSA, SERPENTE, 3, 90.0, CENTRO),
 		_onda(42.0, FLANCOS, SERPENTE, 4, 70.0),
 		_onda(48.0, V, BATEDOR, 7, 40.0, CENTRO),
 		_onda(52.0, LINHA, ASTEROIDE_MEDIO, 2, 220.0, CENTRO),
 		# respiro
-		# Bloco 3
-		_onda(60.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
-		_onda(64.0, V, BATEDOR, 5, 45.0, ESQUERDA),
-		_onda(66.0, V, BATEDOR, 5, 45.0, DIREITA),
-		_onda(72.0, FLANCOS, SERPENTE, 6, 65.0),
+		# Bloco 3: ataques cruzados e imprevisíveis
+		_onda(60.0, DISPERSA, SERPENTE, 4, 85.0, CENTRO),
+		_onda(64.0, DIAGONAL_DIR, BATEDOR, 5, 45.0, ESQUERDA),
+		_onda(66.0, DIAGONAL_ESQ, BATEDOR, 5, 45.0, DIREITA),
+		_onda(72.0, ARCO, SERPENTE, 6, 55.0, CENTRO),
 		_onda(75.0, LINHA, ASTEROIDE_GRANDE, 1, 0.0, CENTRO),
-		_onda(78.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
-		_onda(80.0, V, SERPENTE, 5, 55.0, CENTRO),
+		_onda(78.0, DISPERSA, BATEDOR, 7, 50.0, CENTRO),
+		_onda(81.0, V, SERPENTE, 5, 55.0, CENTRO),
 		# respiro
 		# Bloco 4
-		_onda(92.0, V, BATEDOR, 7, 40.0, CENTRO),
-		_onda(95.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(92.0, DIAGONAL_DIR, BATEDOR, 6, 45.0, ESQUERDA),
+		_onda(95.0, DISPERSA, SERPENTE, 4, 90.0, CENTRO),
 		_onda(100.0, FLANCOS, BATEDOR, 8, 50.0),
-		_onda(104.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(104.0, ARCO, SERPENTE, 5, 60.0, CENTRO),
 		_onda(107.0, LINHA, ASTEROIDE, 2, 200.0, CENTRO),
-		_onda(110.0, V, SERPENTE, 7, 45.0, CENTRO),
+		_onda(110.0, DISPERSA, SERPENTE, 6, 60.0, CENTRO),
 		# respiro
 		# Bloco 5: teste antes do chefe
-		_onda(122.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
-		_onda(125.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		_onda(122.0, DISPERSA, BATEDOR, 7, 50.0, CENTRO),
+		_onda(125.0, DIAGONAL_ESQ, BATEDOR, 6, 50.0, DIREITA),
 		_onda(128.0, FLANCOS, SERPENTE, 6, 65.0),
 		_onda(130.0, LINHA, ASTEROIDE_MEDIO, 1, 0.0, 340.0),
-		_onda(133.0, V, BATEDOR, 7, 40.0, CENTRO),
-		_onda(135.0, V, SERPENTE, 5, 55.0, CENTRO),
-		_onda(140.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
-		_onda(142.0, FLANCOS, BATEDOR, 8, 50.0),
+		_onda(133.0, ARCO, BATEDOR, 7, 45.0, CENTRO),
+		_onda(136.0, V, SERPENTE, 5, 55.0, CENTRO),
+		_onda(140.0, DISPERSA, SERPENTE, 5, 75.0, CENTRO),
+		_onda(143.0, FLANCOS, BATEDOR, 8, 50.0),
 		# respiro curto
 		# Bloco 6: rajada final, tudo junto
-		_onda(152.0, V, SERPENTE, 7, 45.0, CENTRO),
-		_onda(155.0, LINHA, BATEDOR, 4, 60.0, ESQUERDA),
-		_onda(157.0, LINHA, BATEDOR, 4, 60.0, DIREITA),
+		_onda(152.0, ARCO, SERPENTE, 7, 45.0, CENTRO),
+		_onda(155.0, DIAGONAL_DIR, BATEDOR, 5, 50.0, ESQUERDA),
+		_onda(157.0, DIAGONAL_ESQ, BATEDOR, 5, 50.0, DIREITA),
 		_onda(161.0, FLANCOS, SERPENTE, 6, 65.0),
-		_onda(164.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(164.0, DISPERSA, BATEDOR, 8, 45.0, CENTRO),
 	])
 	return fase
 
@@ -166,42 +170,42 @@ static func fase_3() -> DadosFase:
 	fase.ondas.assign([
 		# Bloco 1: apresenta o Bastião, poucos e bem separados
 		_onda(2.0, LINHA, BASTIAO, 2, 160.0, CENTRO),
-		_onda(9.0, V, BATEDOR, 5, 45.0, CENTRO),
-		_onda(13.0, LINHA, BASTIAO, 3, 120.0, CENTRO),
+		_onda(8.0, DIAGONAL_DIR, BATEDOR, 5, 45.0, ESQUERDA),
+		_onda(13.0, ARCO, BASTIAO, 3, 100.0, CENTRO),
 		_onda(19.0, FLANCOS, SERPENTE, 4, 70.0),
 		# respiro
-		# Bloco 2: Bastiões com escolta (quem derrubar primeiro?)
-		_onda(30.0, LINHA, BASTIAO, 3, 120.0, CENTRO),
-		_onda(32.0, V, BATEDOR, 7, 40.0, CENTRO),
+		# Bloco 2: Bastiões com escolta dinâmica
+		_onda(30.0, DISPERSA, BASTIAO, 3, 100.0, CENTRO),
+		_onda(32.0, DIAGONAL_ESQ, BATEDOR, 7, 40.0, DIREITA),
 		_onda(38.0, FLANCOS, BASTIAO, 4, 70.0),
-		_onda(44.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
-		_onda(48.0, V, BATEDOR, 5, 45.0, ESQUERDA),
-		_onda(50.0, V, BATEDOR, 5, 45.0, DIREITA),
+		_onda(44.0, ARCO, SERPENTE, 5, 70.0, CENTRO),
+		_onda(48.0, DIAGONAL_DIR, BATEDOR, 5, 45.0, ESQUERDA),
+		_onda(50.0, DIAGONAL_ESQ, BATEDOR, 5, 45.0, DIREITA),
 		# respiro
-		# Bloco 3: chuva de projéteis
-		_onda(62.0, LINHA, BASTIAO, 5, 90.0, CENTRO),
-		_onda(66.0, V, SERPENTE, 5, 55.0, CENTRO),
+		# Bloco 3: chuva de projéteis e dispersão
+		_onda(62.0, DISPERSA, BASTIAO, 4, 85.0, CENTRO),
+		_onda(66.0, ARCO, SERPENTE, 5, 55.0, CENTRO),
 		_onda(72.0, FLANCOS, BATEDOR, 8, 50.0),
 		_onda(76.0, V, BASTIAO, 3, 70.0, CENTRO),
-		_onda(82.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		_onda(82.0, DISPERSA, BATEDOR, 7, 50.0, CENTRO),
 		# respiro
-		# Bloco 4: prioridade de alvos
-		_onda(94.0, LINHA, BASTIAO, 4, 100.0, CENTRO),
-		_onda(95.0, V, BATEDOR, 7, 40.0, CENTRO),
+		# Bloco 4: prioridade de alvos e cerco
+		_onda(94.0, ARCO, BASTIAO, 4, 80.0, CENTRO),
+		_onda(96.0, DISPERSA, BATEDOR, 7, 45.0, CENTRO),
 		_onda(100.0, FLANCOS, SERPENTE, 6, 65.0),
-		_onda(106.0, LINHA, BASTIAO, 3, 60.0, ESQUERDA),
-		_onda(108.0, LINHA, BASTIAO, 3, 60.0, DIREITA),
-		_onda(112.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(106.0, DIAGONAL_DIR, BASTIAO, 3, 60.0, ESQUERDA),
+		_onda(108.0, DIAGONAL_ESQ, BASTIAO, 3, 60.0, DIREITA),
+		_onda(112.0, DISPERSA, BATEDOR, 8, 40.0, CENTRO),
 		# respiro
 		# Bloco 5: teste final antes da Colmeia
-		_onda(124.0, V, BASTIAO, 5, 55.0, CENTRO),
-		_onda(127.0, LINHA, SERPENTE, 4, 90.0, CENTRO),
+		_onda(124.0, ARCO, BASTIAO, 5, 60.0, CENTRO),
+		_onda(127.0, DISPERSA, SERPENTE, 5, 75.0, CENTRO),
 		_onda(131.0, FLANCOS, BATEDOR, 8, 50.0),
-		_onda(135.0, LINHA, BASTIAO, 5, 90.0, CENTRO),
-		_onda(138.0, V, SERPENTE, 7, 45.0, CENTRO),
-		_onda(142.0, V, BATEDOR, 7, 40.0, CENTRO),
+		_onda(135.0, DISPERSA, BASTIAO, 5, 75.0, CENTRO),
+		_onda(138.0, DIAGONAL_DIR, SERPENTE, 6, 50.0, ESQUERDA),
+		_onda(142.0, DIAGONAL_ESQ, BATEDOR, 7, 40.0, DIREITA),
 		_onda(146.0, FLANCOS, BASTIAO, 4, 70.0),
-		_onda(150.0, LINHA, BATEDOR, 7, 60.0, CENTRO),
+		_onda(150.0, DISPERSA, BATEDOR, 8, 45.0, CENTRO),
 	])
 	return fase
 

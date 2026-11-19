@@ -17,7 +17,7 @@ const DURACAO_DA_FAISCA_DE_ACERTO := 0.15
 @export var cena_tiro_inimigo: PackedScene
 @export var cena_inimigo: PackedScene
 @export var cena_item: PackedScene
-@export var chance_drop: float = 0.12
+@export var chance_drop: float = 0.05
 @export_group("Efeitos animados (vazio = efeito desenhado em código)")
 @export var quadros_explosao_pequena: SpriteFrames
 @export var quadros_explosao_grande: SpriteFrames
@@ -84,20 +84,20 @@ func _ready() -> void:
 ## linha 3: nome da fase/chefe no centro; linha 4: barra do chefe;
 ## rodapé: poderes ativos.
 func _configurar_hud() -> void:
-	_posicionar_rotulo(_placar, Vector2(16, 8), Vector2(220, 24), HORIZONTAL_ALIGNMENT_LEFT, 18)
-	_posicionar_rotulo(_vidas_label, Vector2(244, 8), Vector2(220, 24), HORIZONTAL_ALIGNMENT_RIGHT, 18)
-	_posicionar_rotulo(_recorde_label, Vector2(16, 32), Vector2(220, 20), HORIZONTAL_ALIGNMENT_LEFT, 14)
-	_posicionar_rotulo(_fase_label, Vector2(0, 56), Vector2(480, 22), HORIZONTAL_ALIGNMENT_CENTER, 16)
+	_posicionar_rotulo(_placar, Vector2(16, 6), Vector2(180, 20), HORIZONTAL_ALIGNMENT_LEFT, 16)
+	_posicionar_rotulo(_vidas_label, Vector2(250, 6), Vector2(214, 20), HORIZONTAL_ALIGNMENT_RIGHT, 16)
+	_posicionar_rotulo(_recorde_label, Vector2(16, 26), Vector2(180, 18), HORIZONTAL_ALIGNMENT_LEFT, 13)
+	_posicionar_rotulo(_fase_label, Vector2(0, 22), Vector2(480, 20), HORIZONTAL_ALIGNMENT_CENTER, 15)
 	_posicionar_rotulo(_poder_label, Vector2(16, 692), Vector2(448, 20), HORIZONTAL_ALIGNMENT_LEFT, 14)
 	_poder_label.text = ""
 
-	_barra_chefe.position = Vector2(90, 82)
-	_barra_chefe.size = Vector2(300, 10)
+	_barra_chefe.position = Vector2(120, 46)
+	_barra_chefe.size = Vector2(240, 8)
 	_barra_chefe.nine_patch_stretch = true  # estica a arte da barra para o tamanho acima
-	_barra_chefe.z_index = 60  # a barra fica visível mesmo com o chefe passando por baixo
+	_barra_chefe.z_index = 60
 	_barra_chefe.visible = false
 
-	_indicador_de_vidas.position = Vector2(0, 10)
+	_indicador_de_vidas.position = Vector2(0, 6)
 	_vidas_label.visible = not _indicador_de_vidas.tem_icone()  # plano B: "Vidas 3" em texto
 
 	_flash_de_dano.position = Vector2.ZERO
@@ -213,6 +213,7 @@ func _ao_ondas_esgotadas() -> void:
 func _ao_spawn_solicitado(dados: DadosInimigo, posicao: Vector2) -> void:
 	var inimigo: Inimigo = cena_inimigo.instantiate()
 	inimigo.dados = dados
+	inimigo.fase = _fase_atual + 1
 	inimigo.position = posicao
 	inimigo.morreu.connect(_ao_inimigo_morrer.bind(dados.cor))
 	inimigo.disparou.connect(_ao_inimigo_disparar)
@@ -227,9 +228,10 @@ func _ao_jogador_disparar(posicao: Vector2, direcao: Vector2) -> void:
 	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.TIRO_JOGADOR)
 
 
-func _ao_inimigo_disparar(posicao: Vector2) -> void:
+func _ao_inimigo_disparar(posicao: Vector2, direcao: Vector2 = Vector2.DOWN) -> void:
 	var tiro: TiroInimigo = cena_tiro_inimigo.instantiate()
 	tiro.position = posicao
+	tiro.direcao = direcao
 	_tiros_inimigos.add_child(tiro)
 	GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.TIRO_INIMIGO)
 
@@ -274,6 +276,9 @@ func _ao_inimigo_morrer(pontos: int, posicao: Vector2, cor_do_inimigo: Color) ->
 func _tentar_dropar(posicao: Vector2) -> void:
 	var poderes_da_fase := _fases[_fase_atual].poderes
 	if poderes_da_fase.is_empty() or cena_item == null:
+		return
+	# Se já tem 2 ou mais poderes caídos na tela, não dropa mais
+	if _itens.get_child_count() >= 2:
 		return
 	if randf() > chance_drop:
 		return

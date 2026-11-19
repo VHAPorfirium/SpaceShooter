@@ -12,6 +12,10 @@ const AREA_DO_LOGO := Rect2(40, 70, 400, 180)
 @export var imagem_de_fundo: Texture2D
 @export var logo: Texture2D
 
+const CENA_MENU_VOLUME := preload("res://scenes/menu_volume.tscn")
+
+var _menu_volume: MenuVolume
+
 @onready var _fundo: TextureRect = $Fundo
 @onready var _logo: TextureRect = $Logo
 @onready var _titulo_1: Label = $Titulo1
@@ -27,15 +31,25 @@ func _ready() -> void:
 	_configurar_arte()
 	_configurar(_titulo_1, "SPACE", 170.0, 64, Color("#5ee7ff"), null)
 	_configurar(_titulo_2, "SHOOTER", 245.0, 64, Color("#ff5d73"), null)
-	_configurar(_instrucoes, "Setas ou WASD: mover\nEspaço: atirar\nP ou Esc: pausar", 290.0, 20, Color("#f4f1ff"), FONTE_DAS_INSTRUCOES)
-	_configurar(_recorde, "Recorde %d" % Recorde.carregar(), 392.0, 18, Color("#a89fd6"), null)
-	_configurar(_iniciar, "Pressione Enter para jogar\nEsc para sair", 430.0, 22, Color("#ffd166"), FONTE_DAS_INSTRUCOES)
+	_configurar(_instrucoes, "Setas ou WASD: mover\nEspaço: atirar\nP ou Esc: pausar\nV: Ajustar volume", 280.0, 18, Color("#f4f1ff"), FONTE_DAS_INSTRUCOES)
+	_configurar(_recorde, "Recorde %d" % Recorde.carregar(), 395.0, 18, Color("#a89fd6"), null)
+	_configurar(_iniciar, "Pressione Enter para jogar\nEsc para sair", 435.0, 22, Color("#ffd166"), FONTE_DAS_INSTRUCOES)
 	var tem_logo := logo != null
 	_titulo_1.visible = not tem_logo  # plano B: título em texto
 	_titulo_2.visible = not tem_logo
 
+	_menu_volume = CENA_MENU_VOLUME.instantiate()
+	_menu_volume.visible = false
+	add_child(_menu_volume)
+
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _menu_volume != null and _menu_volume.visible:
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_V:
+		_menu_volume.abrir()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("ui_accept"):
 		GerenciadorAudio.tocar_efeito(GerenciadorAudio.Efeito.CONFIRMAR)
 		get_tree().change_scene_to_file("res://scenes/principal.tscn")

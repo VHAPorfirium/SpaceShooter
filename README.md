@@ -61,6 +61,7 @@ As fases seguem o princípio **introduzir → combinar → testar**: cada uma ap
 | Mover a nave | Setas ou W A S D |
 | Atirar | Espaço (segure para atirar sem parar) |
 | Pausar e continuar | P ou Esc |
+| Ajustar volume (no menu ou pausa) | V |
 | Voltar ao menu (com o jogo pausado) | M |
 | Começar a jogar (no menu) | Enter ou Espaço |
 | Sair do jogo (no menu) | Esc |

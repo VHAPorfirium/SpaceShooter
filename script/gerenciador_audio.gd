@@ -34,9 +34,11 @@ const SOM_POR_EFEITO := {
 	Efeito.FIM_DE_JOGO: preload("res://assets/audio/efeitos/fim_de_jogo.wav"),
 }
 
+const NOME_BARRAMENTO_MASTER := &"Master"
 const NOME_BARRAMENTO_MUSICA := &"Musica"
 const NOME_BARRAMENTO_EFEITOS := &"Efeitos"
 const REDUCAO_VOLUME_MUSICA_PAUSADO_DB := 12.0
+const ARQUIVO_CONFIGURACOES := "user://configuracoes.cfg"
 
 var _tocador_musica: TocadorMusica
 var _banco_efeitos: BancoEfeitos
@@ -55,9 +57,7 @@ func _ready() -> void:
 	for efeito: Efeito in SOM_POR_EFEITO:
 		_banco_efeitos.registrar_efeito(efeito, SOM_POR_EFEITO[efeito], barramento_efeitos)
 
-	var indice_barramento_musica := AudioServer.get_bus_index(NOME_BARRAMENTO_MUSICA)
-	if indice_barramento_musica != -1:
-		_volume_normal_musica_db = AudioServer.get_bus_volume_db(indice_barramento_musica)
+	carregar_configuracoes()
 
 
 func tocar_musica(musica: AudioStream) -> void:
@@ -89,6 +89,53 @@ func definir_jogo_pausado(pausado: bool) -> void:
 	if pausado:
 		volume_desejado_db -= REDUCAO_VOLUME_MUSICA_PAUSADO_DB
 	AudioServer.set_bus_volume_db(indice_barramento_musica, volume_desejado_db)
+
+
+func obter_volume(nome_barramento: StringName) -> float:
+	var indice := AudioServer.get_bus_index(nome_barramento)
+	if indice == -1:
+		return 1.0
+	if AudioServer.is_bus_mute(indice):
+		return 0.0
+	var db := AudioServer.get_bus_volume_db(indice)
+	return db_to_linear(db)
+
+
+func definir_volume(nome_barramento: StringName, volume_linear: float) -> void:
+	var indice := AudioServer.get_bus_index(nome_barramento)
+	if indice == -1:
+		return
+	var volume_clamped := clampf(volume_linear, 0.0, 1.0)
+	if volume_clamped <= 0.005:
+		AudioServer.set_bus_mute(indice, true)
+	else:
+		AudioServer.set_bus_mute(indice, false)
+		var db := linear_to_db(volume_clamped)
+		AudioServer.set_bus_volume_db(indice, db)
+		if nome_barramento == NOME_BARRAMENTO_MUSICA:
+			_volume_normal_musica_db = db
+
+
+func salvar_configuracoes() -> void:
+	var config := ConfigFile.new()
+	config.set_value("audio", "master", obter_volume(NOME_BARRAMENTO_MASTER))
+	config.set_value("audio", "musica", obter_volume(NOME_BARRAMENTO_MUSICA))
+	config.set_value("audio", "efeitos", obter_volume(NOME_BARRAMENTO_EFEITOS))
+	config.save(ARQUIVO_CONFIGURACOES)
+
+
+func carregar_configuracoes() -> void:
+	var config := ConfigFile.new()
+	var err := config.load(ARQUIVO_CONFIGURACOES)
+	if err == OK:
+		definir_volume(NOME_BARRAMENTO_MASTER, float(config.get_value("audio", "master", 1.0)))
+		definir_volume(NOME_BARRAMENTO_MUSICA, float(config.get_value("audio", "musica", 0.8)))
+		definir_volume(NOME_BARRAMENTO_EFEITOS, float(config.get_value("audio", "efeitos", 0.8)))
+	else:
+		# Padrões iniciais limpos
+		var indice_musica := AudioServer.get_bus_index(NOME_BARRAMENTO_MUSICA)
+		if indice_musica != -1:
+			_volume_normal_musica_db = AudioServer.get_bus_volume_db(indice_musica)
 
 
 func _barramento_ou_master(nome_barramento: StringName) -> StringName:

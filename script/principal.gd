@@ -91,9 +91,7 @@ func _configurar_hud() -> void:
 	_posicionar_rotulo(_poder_label, Vector2(16, 692), Vector2(448, 20), HORIZONTAL_ALIGNMENT_LEFT, 14)
 	_poder_label.text = ""
 
-	_barra_chefe.position = Vector2(120, 46)
-	_barra_chefe.size = Vector2(240, 8)
-	_barra_chefe.nine_patch_stretch = true  # estica a arte da barra para o tamanho acima
+	_posicionar_barra_do_chefe()
 	_barra_chefe.z_index = 60
 	_barra_chefe.visible = false
 
@@ -102,6 +100,21 @@ func _configurar_hud() -> void:
 
 	_flash_de_dano.position = Vector2.ZERO
 	_flash_de_dano.size = FundoEstrelado.TAMANHO_DA_TELA
+
+
+## Centraliza a barra do chefe na tela.
+## O nine_patch_stretch precisa ser ligado ANTES de mudar o tamanho: sem ele,
+## o Godot trava o tamanho mínimo no tamanho da arte (300x12) e a barra fica maior do que o pedido.
+func _posicionar_barra_do_chefe() -> void:
+	const LARGURA_DA_BARRA_DO_CHEFE := 240.0
+	const ALTURA_DA_BARRA_DO_CHEFE := 8.0
+	const POSICAO_VERTICAL_DA_BARRA_DO_CHEFE := 46.0
+	var largura_da_tela := FundoEstrelado.TAMANHO_DA_TELA.x
+	_barra_chefe.nine_patch_stretch = true
+	_barra_chefe.custom_minimum_size = Vector2.ZERO
+	_barra_chefe.size = Vector2(LARGURA_DA_BARRA_DO_CHEFE, ALTURA_DA_BARRA_DO_CHEFE)
+	var posicao_horizontal_centralizada := (largura_da_tela - LARGURA_DA_BARRA_DO_CHEFE) / 2.0
+	_barra_chefe.position = Vector2(posicao_horizontal_centralizada, POSICAO_VERTICAL_DA_BARRA_DO_CHEFE)
 
 
 func _posicionar_rotulo(rotulo: Label, posicao: Vector2, tamanho: Vector2,

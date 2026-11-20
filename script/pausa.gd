@@ -1,3 +1,5 @@
+extends Node
+
 const CENA_MENU_VOLUME := preload("res://scenes/menu_volume.tscn")
 
 var habilitada: bool = true
@@ -59,4 +61,3 @@ func _alternar() -> void:
 func _ao_fechar_menu_volume() -> void:
 	if get_tree().paused:
 		_texto.visible = true
-

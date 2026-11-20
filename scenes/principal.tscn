@@ -109,8 +109,11 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="BarraChefe" type="TextureProgressBar" parent="." unique_id=537961307]
-offset_right = 300.0
-offset_bottom = 12.0
+offset_left = 120.0
+offset_top = 46.0
+offset_right = 360.0
+offset_bottom = 54.0
+nine_patch_stretch = true
 texture_under = ExtResource("27_barra_fundo")
 texture_progress = ExtResource("28_barra_preenchimento")
 
